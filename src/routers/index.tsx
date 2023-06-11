@@ -13,6 +13,7 @@ import CalendarComponent from "../components/Calendar";
 import Settings from "../components/Settings";
 import { COLOR_PRIMARY } from "../helper/theme";
 import AddCategory from "../components/Dashboard/addCategory";
+import Task from "../components/Dashboard/Task";
 
 const EntryStack = createStackNavigator();
 
@@ -86,7 +87,8 @@ const MyBot = () => (
       component={Status}
       options={{
         tabBarLabel: "",
-        headerShown: false,
+        title: "Status",
+        headerTitleAlign: 'center',        
         tabBarIcon: ({ focused }) => (
           <TabbarIcon
             routeName="Status"
@@ -156,6 +158,13 @@ const Home = () => (
         component={AddCategory}
         options={{
           title: 'Category'
+        }}
+      />
+      <MainDash.Screen 
+        name="Task"
+        component={Task}
+        options={{
+          title: 'Create Task'
         }}
       />
     </MainDash.Navigator>

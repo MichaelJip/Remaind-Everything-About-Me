@@ -7,10 +7,10 @@ import { Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 const AddCategory = () => {
-  const nav = useNavigation()
+  const nav = useNavigation<any>()
   return (
     <Div flex={1} bg='#fff'>
-        <Pressable>
+        <Pressable onPress={() => nav.navigate('Task')}>
             <Div h={heightPercentageToDP(8)} bg={COLOR_PRIMARY} m={10} rounded={8}>
                 <Text fontSize={Responsive(24)} ml={widthPercentageToDP(5)} mt={heightPercentageToDP(2)} fontWeight='500'>Olahraga</Text>
             </Div>

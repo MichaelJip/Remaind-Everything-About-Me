@@ -29,7 +29,7 @@ const Status = () => {
   return (
     <Div bg="#fff" flex={1}>
       <Div
-        mt={heightPercentageToDP(10)}
+        mt={heightPercentageToDP(2)}
         ml={widthPercentageToDP(8)}
         mr={widthPercentageToDP(8)}
         row
