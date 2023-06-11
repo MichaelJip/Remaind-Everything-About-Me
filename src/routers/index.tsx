@@ -12,6 +12,7 @@ import Status from "../components/Status";
 import CalendarComponent from "../components/Calendar";
 import Settings from "../components/Settings";
 import { COLOR_PRIMARY } from "../helper/theme";
+import AddCategory from "../components/Dashboard/addCategory";
 
 const EntryStack = createStackNavigator();
 
@@ -66,11 +67,10 @@ const MyBot = () => (
   >
     <Tab.Screen
       name="Dashboard"
-      component={Dashboard}
-      options={{
-        title: "My Reminder",
-        headerTitleAlign: "center",
+      component={Home}
+      options={{      
         tabBarLabel: "",
+        headerShown: false,
         tabBarIcon: ({ focused }) => (
           <TabbarIcon
             routeName="Home"
@@ -119,7 +119,8 @@ const MyBot = () => (
       component={Settings}
       options={{
         tabBarLabel: "",
-        headerShown: false,
+        title: 'My Profile',
+        headerTitleAlign: 'center',      
         tabBarIcon: ({ focused }) => (
           <TabbarIcon
             routeName="Settings"
@@ -132,5 +133,32 @@ const MyBot = () => (
     />
   </Tab.Navigator>
 );
+
+const MainDash = createStackNavigator()
+
+const Home = () => (
+    <MainDash.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: COLOR_PRIMARY,        
+      },
+      headerTitleAlign: 'center'
+    }}>
+      <MainDash.Screen 
+        name="Home"
+        component={Dashboard}
+        options={{          
+          title: "My Reminder",          
+          headerLeft: () => null     
+        }}
+      />
+      <MainDash.Screen 
+        name="Category"
+        component={AddCategory}
+        options={{
+          title: 'Category'
+        }}
+      />
+    </MainDash.Navigator>
+)
 
 export default Router;

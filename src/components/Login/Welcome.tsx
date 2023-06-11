@@ -9,7 +9,7 @@ import { COLOR_PRIMARY } from "../../helper/theme";
 import { useNavigation } from "@react-navigation/native";
 
 const Welcome = () => {
-  const nav = useNavigation();
+  const nav = useNavigation<any>();
   return (
     <Div flex={1}>
       <Div

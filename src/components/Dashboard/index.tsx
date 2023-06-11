@@ -1,13 +1,19 @@
-import React from "react";
-import { Div, Text } from "react-native-magnus";
+import React, { useEffect, useState } from "react";
+import { Div, Fab, Icon, ScrollDiv, Text } from "react-native-magnus";
 import { Responsive } from "../../helper/Responsive";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import { ProgressChart } from "react-native-chart-kit";
+import { COLOR_PRIMARY } from "../../helper/theme";
+import { ScrollView, StyleSheet, TouchableOpacity, Animated } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const Dashboard = () => {
+const Dashboard = () => {  
+  
+  const nav = useNavigation<any>()
+  
   const data = {
     data: [0.5],
   };
@@ -53,9 +59,9 @@ const Dashboard = () => {
       </Div>
     );
   };
-  return (
-    <Div>
-      <ChartComponent />
+
+  const CardNotif = () => {
+    return(
       <Div
         row
         justifyContent="space-between"
@@ -64,8 +70,10 @@ const Dashboard = () => {
         borderWidth={0.5}
         borderColor="#000"
         h={heightPercentageToDP(12)}
+        mt={heightPercentageToDP(1)}
         ml={widthPercentageToDP(4)}
         mr={widthPercentageToDP(4)}
+        mb={heightPercentageToDP(2)}
         rounded={8}
       >
         <Div ml={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
@@ -80,8 +88,39 @@ const Dashboard = () => {
           </Text>
         </Div>
       </Div>
+    )
+  }
+
+  return (
+    <Div flex={1} bg="#fff">
+      <ScrollView>
+        <Div flex={1}>
+          <ChartComponent />
+          <CardNotif />
+          <CardNotif />
+          <CardNotif />
+          <CardNotif />
+          <CardNotif />          
+        </Div>
+      </ScrollView>
+      <Div position="absolute" bottom={24} right={24}>
+            <TouchableOpacity style={styles.fab} activeOpacity={.7} onPress={() => nav.navigate('Category')}>
+              <Icon fontFamily="AntDesign" name="pluscircle" color={COLOR_PRIMARY} fontSize={Responsive(40)} />                 
+            </TouchableOpacity>
+          </Div>
     </Div>
   );
 };
+
+const styles = StyleSheet.create({
+  fab: {    
+    borderRadius: 30,    
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
+    marginBottom: heightPercentageToDP(1)
+  }
+})
 
 export default Dashboard;

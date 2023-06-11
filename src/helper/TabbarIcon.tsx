@@ -12,7 +12,7 @@ type PropsIcon = {
   focused: boolean;
   iconName: string;
   routeName?: string;
-  iconFrom: string;
+  iconFrom: any;
 };
 
 function TabbarIcon({ focused, iconName, routeName, iconFrom }: PropsIcon) {

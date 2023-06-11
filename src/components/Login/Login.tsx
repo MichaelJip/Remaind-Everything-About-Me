@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const nav = useNavigation();
+  const nav = useNavigation<any>();
   return (
     <Div flex={1} bg={COLOR_PRIMARY}>
       <Div
