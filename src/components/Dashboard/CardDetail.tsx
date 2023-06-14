@@ -1,15 +1,13 @@
-import React, {useState} from 'react'
-import { Button, Div, Input, Text } from 'react-native-magnus'
-import { Responsive } from '../../helper/Responsive'
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
-import DropDownPicker from 'react-native-dropdown-picker'
-import DateTimePicker from '@react-native-community/datetimepicker';
-import HeadlessDatePicker from '../DatePicker/HeadlessDatePicker'
-import PickerButtonDesign from '../DatePicker/PickerButtonDesign'
-import { formatDate } from '../../helper/formatDate'
-import PickerTimerDesign from '../DatePicker/PickerTimerDesign'
-
-const Task = () => {
+import { Button, Div, Input, Text } from "react-native-magnus"
+import { Responsive } from "../../helper/Responsive"
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen"
+import {useState} from 'react'
+import DropDownPicker from "react-native-dropdown-picker"
+import HeadlessDatePicker from "../DatePicker/HeadlessDatePicker"
+import PickerButtonDesign from "../DatePicker/PickerButtonDesign"
+import { formatDate } from "../../helper/formatDate"
+import PickerTimerDesign from "../DatePicker/PickerTimerDesign"
+const CardDetail = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -66,11 +64,16 @@ const Task = () => {
             />
         </Div>
 
-        <Button w={widthPercentageToDP(95)} ml={widthPercentageToDP(3)} mr={widthPercentageToDP(3)} bg='#000' color='#fff' fontWeight='bold'>
-            Create
-        </Button>
+        <Div row justifyContent="space-between"> 
+            <Button w={widthPercentageToDP(45)} ml={widthPercentageToDP(3)} mr={widthPercentageToDP(3)} bg='#f1c40f' color='#fff' fontWeight='bold'>
+                Update
+            </Button>
+            <Button w={widthPercentageToDP(45)} ml={widthPercentageToDP(3)} mr={widthPercentageToDP(3)} bg='red' color='#fff' fontWeight='bold'>
+                Delete
+            </Button>
+        </Div>
     </Div>
   )
 }
 
-export default Task
+export default CardDetail

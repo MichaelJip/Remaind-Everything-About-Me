@@ -8,11 +8,19 @@ import {
 } from "react-native-responsive-screen";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Male', value: 'm'},
+    {label: 'Female', value: 'f'}
+  ]);
+
   return (
     <Div flex={1} bg={COLOR_PRIMARY}>
       <Div
@@ -28,6 +36,7 @@ const Register = () => {
         </Text>
       </Div>
       <ScrollDiv
+        flex={1}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         h={heightPercentageToDP(100)}
@@ -76,6 +85,17 @@ const Register = () => {
               onChangeText={(val) => setPassword(val)}
               w={widthPercentageToDP(87)}
               secureTextEntry
+            />
+            <Text fontWeight="bold" fontSize={Responsive(18)}>
+              Gender:
+            </Text>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
             />
           </Div>
         </KeyboardAvoidingView>

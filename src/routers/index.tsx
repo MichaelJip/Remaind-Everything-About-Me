@@ -14,6 +14,10 @@ import Settings from "../components/Settings";
 import { COLOR_PRIMARY } from "../helper/theme";
 import AddCategory from "../components/Dashboard/addCategory";
 import Task from "../components/Dashboard/Task";
+import ForgotPassword from "../components/ForgetPassword/ForgotPassword";
+import NewPassword from "../components/ForgetPassword/NewPassword";
+import CardDetail from "../components/Dashboard/CardDetail";
+import EditProfile from "../components/Profile";
 
 const EntryStack = createStackNavigator();
 
@@ -21,7 +25,6 @@ const EntryStack = createStackNavigator();
 
 export const Router = () => {
   return (
-    <NavigationContainer>
       <EntryStack.Navigator>
         <EntryStack.Screen
           name="Welcome"
@@ -45,6 +48,20 @@ export const Router = () => {
           }}
         />
         <EntryStack.Screen
+          name="Forget"
+          component={ForgotPassword}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <EntryStack.Screen
+          name="NewPass"
+          component={NewPassword}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <EntryStack.Screen
           name="Dashboard"
           component={MyBot}
           options={{
@@ -52,7 +69,6 @@ export const Router = () => {
           }}
         />
       </EntryStack.Navigator>
-    </NavigationContainer>
   );
 };
 
@@ -118,11 +134,9 @@ const MyBot = () => (
     />
     <Tab.Screen
       name="Settings"
-      component={Settings}
+      component={Profile}
       options={{
-        tabBarLabel: "",
-        title: 'My Profile',
-        headerTitleAlign: 'center',      
+        headerShown: false,            
         tabBarIcon: ({ focused }) => (
           <TabbarIcon
             routeName="Settings"
@@ -167,7 +181,42 @@ const Home = () => (
           title: 'Create Task'
         }}
       />
+      <MainDash.Screen 
+        name="TaskDetail"
+        component={CardDetail}
+        options={{
+          title: 'Update Task'
+        }}
+      />
     </MainDash.Navigator>
+)
+
+const ProfileDash = createStackNavigator()
+
+const Profile = () => (
+    <ProfileDash.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: COLOR_PRIMARY,        
+      },
+      headerTitleAlign: 'center'
+    }}>
+      <ProfileDash.Screen 
+        name="Settings"
+        component={Settings}
+        options={{                    
+          title: 'My Profile',        
+          headerLeft: () => null  
+        }}
+      />
+      <ProfileDash.Screen 
+        name="Profile"
+        component={EditProfile}
+        options={{                    
+          title: 'Edit Profile',                  
+        }}
+      />
+      
+    </ProfileDash.Navigator>
 )
 
 export default Router;

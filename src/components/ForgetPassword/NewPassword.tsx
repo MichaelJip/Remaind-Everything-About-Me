@@ -1,17 +1,12 @@
-import React, { useState } from "react";
-import { Button, Div, Input, ScrollDiv, Text } from "react-native-magnus";
-import { COLOR_PRIMARY } from "../../helper/theme";
-import { Responsive } from "../../helper/Responsive";
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from "react-native-responsive-screen";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react'
+import { Button, Div, Input, ScrollDiv, Text } from 'react-native-magnus'
+import { useNavigation } from '@react-navigation/native';
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
+import { COLOR_PRIMARY } from '../../helper/theme';
+import { Responsive } from '../../helper/Responsive';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
-const Login = () => {
-  const [email, setEmail] = useState("");
+const NewPassword = () => {
   const [password, setPassword] = useState("");
   const nav = useNavigation<any>();
   return (
@@ -22,7 +17,7 @@ const Login = () => {
         mb={heightPercentageToDP(5)}
       >
         <Text fontSize={Responsive(24)} fontWeight="bold">
-          Sign In
+          New Password
         </Text>
         <Text mt={heightPercentageToDP(1)}>
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -47,38 +42,18 @@ const Login = () => {
             mr={heightPercentageToDP(3)}
           >
             <Text fontWeight="bold" fontSize={Responsive(18)}>
-              Email:
-            </Text>
-            <Input
-              mt={heightPercentageToDP(1)}
-              placeholder="Email here...."
-              value={email}
-              onChangeText={(val) => setEmail(val)}
-              keyboardType="email-address"
-              w={widthPercentageToDP(87)}
-            />
-            <Text fontWeight="bold" fontSize={Responsive(18)}>
-              Password:
+              New Password:
             </Text>
             <Input
               mt={heightPercentageToDP(1)}
               placeholder="Password here...."
               value={password}
               onChangeText={(val) => setPassword(val)}
+              keyboardType="visible-password"
               w={widthPercentageToDP(87)}
-              secureTextEntry
-            />
+            />            
           </Div>
-        </KeyboardAvoidingView>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => nav.navigate('Forget')}>
-          <Text
-            textAlign="right"
-            mr={widthPercentageToDP(7.5)}
-            mt={heightPercentageToDP(1)}
-          >
-            Forget Password?
-          </Text>
-        </TouchableOpacity>
+        </KeyboardAvoidingView>        
         <Button
           w={widthPercentageToDP(87)}
           m={heightPercentageToDP(3)}
@@ -87,13 +62,13 @@ const Login = () => {
           fontSize={Responsive(16)}
           fontWeight="500"
           rounded={16}
-          onPress={() => nav.navigate("Dashboard")}
+          onPress={() => nav.navigate("Login")}
         >
-          Sign In
+          Submit
         </Button>
       </ScrollDiv>
     </Div>
   );
 };
 
-export default Login;
+export default NewPassword

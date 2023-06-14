@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Div, Fab, Icon, ScrollDiv, Text } from "react-native-magnus";
 import { Responsive } from "../../helper/Responsive";
+import {Pressable} from 'react-native'
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -9,13 +10,14 @@ import { ProgressChart } from "react-native-chart-kit";
 import { COLOR_PRIMARY } from "../../helper/theme";
 import { ScrollView, StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
 
 const Dashboard = () => {  
   
   const nav = useNavigation<any>()
   
   const data = {
-    data: [0.5],
+    data: [0.2],
   };
   const chartConfig = {
     backgroundGradientFrom: "#fff",
@@ -53,41 +55,65 @@ const Dashboard = () => {
             Your Plan for today
           </Text>
           <Text fontSize={Responsive(16)} color="#c4c4c4">
-            5 of 10 Completed
+            1 of 4 Completed
           </Text>
         </Div>
       </Div>
     );
   };
 
-  const CardNotif = () => {
+  const dataNotif = [
+    {title: 'Morning Walk',
+      category: "Olahraga",
+      time: '06:30'
+    },
+
+    {title: 'Makan Siang',
+      category: "Makan",
+      time: '11:55'
+    },
+
+    {title: 'Tidur Sore',
+      category: "Tidur",
+      time: '15:00'
+    },
+
+    {title: 'Push Up',
+      category: "Olahraga",
+      time: '18:00'
+    },
+  ]
+
+  const CardNotif = ({item}:any) => {
     return(
-      <Div
-        row
-        justifyContent="space-between"
-        p={widthPercentageToDP(4)}
-        bg="#fff"
-        borderWidth={0.5}
-        borderColor="#000"
-        h={heightPercentageToDP(12)}
-        mt={heightPercentageToDP(1)}
-        ml={widthPercentageToDP(4)}
-        mr={widthPercentageToDP(4)}
-        mb={heightPercentageToDP(2)}
-        rounded={8}
-      >
-        <Div ml={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
-          <Text fontWeight="bold" fontSize={Responsive(20)}>
-            Morning Walk
-          </Text>
-          <Text fontSize={Responsive(16)}>Michael</Text>
+      <Pressable onPress={() => nav.navigate('TaskDetail')}>
+        <Div
+          row
+          justifyContent="space-between"
+          p={widthPercentageToDP(4)}
+          bg="#fff"
+          borderWidth={0.5}
+          borderColor="#000"
+          h={heightPercentageToDP(12)}
+          mt={heightPercentageToDP(1)}
+          ml={widthPercentageToDP(4)}
+          mr={widthPercentageToDP(4)}
+          mb={heightPercentageToDP(2)}
+          rounded={8}
+        >
+          <Div ml={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
+            <Text fontWeight="bold" fontSize={Responsive(20)}>
+              {item?.title}
+            </Text>
+            <Text fontSize={Responsive(16)}>{item?.category}</Text>
+          </Div>
+          <Div mr={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
+            <Text fontWeight="bold" fontSize={Responsive(24)}>
+              {item?.time}
+            </Text>
+          </Div>
         </Div>
-        <Div mr={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
-          <Text fontWeight="bold" fontSize={Responsive(24)}>
-            06:00
-          </Text>
-        </Div>
-      </Div>
+      </Pressable>
     )
   }
 
@@ -96,11 +122,10 @@ const Dashboard = () => {
       <ScrollView>
         <Div flex={1}>
           <ChartComponent />
-          <CardNotif />
-          <CardNotif />
-          <CardNotif />
-          <CardNotif />
-          <CardNotif />          
+          <FlashList 
+            data={dataNotif}
+            renderItem={CardNotif}
+          />                      
         </Div>
       </ScrollView>
       <Div position="absolute" bottom={24} right={24}>
