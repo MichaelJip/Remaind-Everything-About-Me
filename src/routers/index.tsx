@@ -136,7 +136,8 @@ const MyBot = () => (
       name="Settings"
       component={Profile}
       options={{
-        headerShown: false,            
+        headerShown: false,   
+        tabBarLabel: "",         
         tabBarIcon: ({ focused }) => (
           <TabbarIcon
             routeName="Settings"

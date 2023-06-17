@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Div, Input, ScrollDiv, Text } from "react-native-magnus";
+import { Button, Div, Icon, Input, ScrollDiv, Text } from "react-native-magnus";
 import { COLOR_PRIMARY } from "../../helper/theme";
 import { Responsive } from "../../helper/Responsive";
 import {
@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const nav = useNavigation<any>();
   return (
     <Div flex={1} bg={COLOR_PRIMARY}>
@@ -25,7 +26,8 @@ const Login = () => {
           Sign In
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+          
+Sign in to our reminder app and unlock a world of organized productivity. Stay on top of your tasks with ease and never miss a beat.
         </Text>
       </Div>
       <ScrollDiv
@@ -66,7 +68,19 @@ const Login = () => {
               value={password}
               onChangeText={(val) => setPassword(val)}
               w={widthPercentageToDP(87)}
-              secureTextEntry
+              secureTextEntry={!isPasswordVisible}
+
+              suffix={<TouchableOpacity
+              style={{ right: 5 }}
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+            >
+              <Icon
+                name={isPasswordVisible ? 'eye' : 'eye-with-line'}
+                fontSize={16}
+                color="black"
+                fontFamily="Entypo"
+              />
+            </TouchableOpacity>}
             />
           </Div>
         </KeyboardAvoidingView>

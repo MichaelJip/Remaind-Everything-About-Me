@@ -38,8 +38,7 @@ const Welcome = () => {
             Welcome
           </Text>
           <Text w={widthPercentageToDP(80)}>
-            Lorem ipsum, or lipsum as it is sometimes, is dummy text used in
-            laying out print, graphic or web designs.
+            Stay organized and never miss a beat with our innovative reminder app. Download now and experience effortless scheduling for a more productive life.
           </Text>
           <Div row mt={heightPercentageToDP(2)}>
             <Button

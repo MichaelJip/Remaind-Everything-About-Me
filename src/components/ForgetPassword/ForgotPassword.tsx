@@ -20,7 +20,7 @@ const ForgotPassword = () => {
           Forget Password
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+          Forgot your password? No worries! Easily reset it and regain access to your reminders with just a few simple steps.
         </Text>
       </Div>
       <ScrollDiv

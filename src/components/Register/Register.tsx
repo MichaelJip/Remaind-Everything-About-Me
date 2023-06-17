@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Div, Input, ScrollDiv, Text } from "react-native-magnus";
+import { Button, Div, Icon, Input, ScrollDiv, Text } from "react-native-magnus";
 import { COLOR_PRIMARY } from "../../helper/theme";
 import { Responsive } from "../../helper/Responsive";
 import {
@@ -14,6 +14,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -25,14 +26,14 @@ const Register = () => {
     <Div flex={1} bg={COLOR_PRIMARY}>
       <Div
         m={heightPercentageToDP(2)}
-        mt={heightPercentageToDP(40)}
+        mt={heightPercentageToDP(30)}
         mb={heightPercentageToDP(5)}
       >
         <Text fontSize={Responsive(24)} fontWeight="bold">
           Sign Up
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+          Sign up for our reminder app and take control of your schedule. Never forget important tasks again with our intuitive and efficient platform.
         </Text>
       </Div>
       <ScrollDiv
@@ -84,7 +85,18 @@ const Register = () => {
               value={password}
               onChangeText={(val) => setPassword(val)}
               w={widthPercentageToDP(87)}
-              secureTextEntry
+              secureTextEntry={!isPasswordVisible}
+              suffix={<TouchableOpacity
+              style={{ right: 5 }}
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+            >
+              <Icon
+                name={isPasswordVisible ? 'eye' : 'eye-with-line'}
+                fontSize={16}
+                color="black"
+                fontFamily="Entypo"
+              />
+            </TouchableOpacity>}
             />
             <Text fontWeight="bold" fontSize={Responsive(18)}>
               Gender:
