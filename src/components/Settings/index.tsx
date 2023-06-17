@@ -50,39 +50,14 @@ const Settings = () => {
               Edit Profile
             </Text>
           </Div>
-        </TouchableOpacity>
+        </TouchableOpacity>        
 
         <TouchableOpacity
           style={{
             marginLeft: widthPercentageToDP(4),
             marginTop: heightPercentageToDP(2),
           }}
-          onPress={() => alert("Edit Profile")}
-          activeOpacity={0.7}
-        >
-          <Div row>
-            <Icon
-              fontFamily="FontAwesome"
-              name="bell"
-              fontSize={Responsive(20)}
-              color="#000"
-            />
-            <Text
-              ml={widthPercentageToDP(2)}
-              fontSize={Responsive(16)}
-              color="#000"
-            >
-              Notification
-            </Text>
-          </Div>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            marginLeft: widthPercentageToDP(4),
-            marginTop: heightPercentageToDP(2),
-          }}
-          onPress={() => alert("Edit Profile")}
+          onPress={() => alert("Logout")}
           activeOpacity={0.7}
         >
           <Div row>
