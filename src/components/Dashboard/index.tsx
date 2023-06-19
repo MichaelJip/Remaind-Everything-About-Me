@@ -94,7 +94,7 @@ const Dashboard = () => {
           bg="#fff"
           borderWidth={0.5}
           borderColor="#000"
-          h={heightPercentageToDP(12)}
+          h={'auto'}
           mt={heightPercentageToDP(1)}
           ml={widthPercentageToDP(4)}
           mr={widthPercentageToDP(4)}
@@ -106,8 +106,9 @@ const Dashboard = () => {
               {item?.title}
             </Text>
             <Text fontSize={Responsive(16)}>{item?.category}</Text>
+            <Text fontSize={Responsive(12)} w={widthPercentageToDP(60)} numberOfLines={2}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, </Text>
           </Div>
-          <Div mr={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
+          <Div mr={widthPercentageToDP(2)} mt={heightPercentageToDP(1)} justifyContent="center">
             <Text fontWeight="bold" fontSize={Responsive(24)}>
               {item?.time}
             </Text>

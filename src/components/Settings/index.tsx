@@ -57,6 +57,31 @@ const Settings = () => {
             marginLeft: widthPercentageToDP(4),
             marginTop: heightPercentageToDP(2),
           }}
+          onPress={() => nav.navigate('Profile')}
+          activeOpacity={0.7}
+        >
+          <Div row>
+            <Icon
+              fontFamily="FontAwesome"
+              name="file-text"
+              fontSize={Responsive(24)}
+              color="#000"
+            />
+            <Text
+              ml={widthPercentageToDP(2)}
+              fontSize={Responsive(16)}
+              color="#000"
+            >
+              Summary
+            </Text>
+          </Div>
+        </TouchableOpacity> 
+        
+        <TouchableOpacity
+          style={{
+            marginLeft: widthPercentageToDP(4),
+            marginTop: heightPercentageToDP(2),
+          }}
           onPress={() => alert("Logout")}
           activeOpacity={0.7}
         >

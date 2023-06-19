@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Button, Div, Input, Text } from 'react-native-magnus'
+import { Button, Div, Input, ScrollDiv, Text } from 'react-native-magnus'
 import { Responsive } from '../../helper/Responsive'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -20,7 +20,7 @@ const Task = () => {
     {label: 'Nasi dan sayur bayam', value: 'b'},    
   ]);
   return (
-    <Div flex={1} bg='#fff'>
+    <ScrollDiv flex={1} bg='#fff'>
         <Div p={10}>
             <Text fontSize={Responsive(20)} color='#000' fontWeight='500'>Title: </Text>
             <Input placeholder='Title....' mt={heightPercentageToDP(0.5)} />
@@ -55,21 +55,16 @@ const Task = () => {
         </Div>
 
         <Div p={10}>
-            <Text fontSize={Responsive(20)} color='#000' fontWeight='500'>Recommendation: </Text>
-            <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            />
+            <Text fontSize={Responsive(20)} color='#000' fontWeight='500'>Activity: </Text>
+            <Button w={widthPercentageToDP(95)} color='#000' borderColor='#000' borderWidth={1} bg='transparent' mt={heightPercentageToDP(1)}>Choose Activity</Button>
         </Div>
 
-        <Button w={widthPercentageToDP(95)} ml={widthPercentageToDP(3)} mr={widthPercentageToDP(3)} bg='#000' color='#fff' fontWeight='bold'>
+        <Div bg='#c4c4c4' h={heightPercentageToDP(0.5)} mr={widthPercentageToDP(3)} ml={widthPercentageToDP(3)} />
+
+        <Button w={widthPercentageToDP(95)} ml={widthPercentageToDP(3)} mr={widthPercentageToDP(3)} mt={heightPercentageToDP(1)} bg='#000' color='#fff' fontWeight='bold'>
             Create
         </Button>
-    </Div>
+    </ScrollDiv>
   )
 }
 

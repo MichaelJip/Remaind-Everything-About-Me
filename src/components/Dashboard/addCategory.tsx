@@ -17,8 +17,15 @@ const AddCategory = () => {
         </Pressable>
         <Div h={heightPercentageToDP(8)} bg={COLOR_PRIMARY} m={10} rounded={8}>
             <Text fontSize={Responsive(24)} ml={widthPercentageToDP(5)} mt={heightPercentageToDP(2)} fontWeight='500'>Tidur</Text>
-        </Div><Div h={heightPercentageToDP(8)} bg={COLOR_PRIMARY} m={10} rounded={8}>
+        </Div>
+        <Div h={heightPercentageToDP(8)} bg={COLOR_PRIMARY} m={10} rounded={8}>
             <Text fontSize={Responsive(24)} ml={widthPercentageToDP(5)} mt={heightPercentageToDP(2)} fontWeight='500'>Makan</Text>
+        </Div>
+        <Div h={heightPercentageToDP(8)} bg={COLOR_PRIMARY} m={10} rounded={8}>
+            <Text fontSize={Responsive(24)} ml={widthPercentageToDP(5)} mt={heightPercentageToDP(2)} fontWeight='500'>Minum</Text>
+        </Div>
+        <Div h={heightPercentageToDP(8)} bg={COLOR_PRIMARY} m={10} rounded={8}>
+            <Text fontSize={Responsive(24)} ml={widthPercentageToDP(5)} mt={heightPercentageToDP(2)} fontWeight='500'>Lainnya</Text>
         </Div>
     </Div>
   )
