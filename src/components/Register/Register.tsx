@@ -18,8 +18,8 @@ const Register = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Male', value: 'm'},
-    {label: 'Female', value: 'f'}
+    { label: "Male", value: "m" },
+    { label: "Female", value: "f" },
   ]);
 
   return (
@@ -33,7 +33,9 @@ const Register = () => {
           Sign Up
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          Sign up for our reminder app and take control of your schedule. Never forget important tasks again with our intuitive and efficient platform.
+          Sign up for our reminder app and take control of your schedule. Never
+          forget important tasks again with our intuitive and efficient
+          platform.
         </Text>
       </Div>
       <ScrollDiv
@@ -86,17 +88,19 @@ const Register = () => {
               onChangeText={(val) => setPassword(val)}
               w={widthPercentageToDP(87)}
               secureTextEntry={!isPasswordVisible}
-              suffix={<TouchableOpacity
-              style={{ right: 5 }}
-              onPress={() => setPasswordVisible(!isPasswordVisible)}
-            >
-              <Icon
-                name={isPasswordVisible ? 'eye' : 'eye-with-line'}
-                fontSize={16}
-                color="black"
-                fontFamily="Entypo"
-              />
-            </TouchableOpacity>}
+              suffix={
+                <TouchableOpacity
+                  style={{ right: 5 }}
+                  onPress={() => setPasswordVisible(!isPasswordVisible)}
+                >
+                  <Icon
+                    name={isPasswordVisible ? "eye" : "eye-with-line"}
+                    fontSize={16}
+                    color="black"
+                    fontFamily="Entypo"
+                  />
+                </TouchableOpacity>
+              }
             />
             <Text fontWeight="bold" fontSize={Responsive(18)}>
               Gender:

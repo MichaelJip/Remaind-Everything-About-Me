@@ -26,8 +26,9 @@ const Login = () => {
           Sign In
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          
-Sign in to our reminder app and unlock a world of organized productivity. Stay on top of your tasks with ease and never miss a beat.
+          Sign in to our reminder app and unlock a world of organized
+          productivity. Stay on top of your tasks with ease and never miss a
+          beat.
         </Text>
       </Div>
       <ScrollDiv
@@ -69,22 +70,26 @@ Sign in to our reminder app and unlock a world of organized productivity. Stay o
               onChangeText={(val) => setPassword(val)}
               w={widthPercentageToDP(87)}
               secureTextEntry={!isPasswordVisible}
-
-              suffix={<TouchableOpacity
-              style={{ right: 5 }}
-              onPress={() => setPasswordVisible(!isPasswordVisible)}
-            >
-              <Icon
-                name={isPasswordVisible ? 'eye' : 'eye-with-line'}
-                fontSize={16}
-                color="black"
-                fontFamily="Entypo"
-              />
-            </TouchableOpacity>}
+              suffix={
+                <TouchableOpacity
+                  style={{ right: 5 }}
+                  onPress={() => setPasswordVisible(!isPasswordVisible)}
+                >
+                  <Icon
+                    name={isPasswordVisible ? "eye" : "eye-with-line"}
+                    fontSize={16}
+                    color="black"
+                    fontFamily="Entypo"
+                  />
+                </TouchableOpacity>
+              }
             />
           </Div>
         </KeyboardAvoidingView>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => nav.navigate('Forget')}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => nav.navigate("Forget")}
+        >
           <Text
             textAlign="right"
             mr={widthPercentageToDP(7.5)}

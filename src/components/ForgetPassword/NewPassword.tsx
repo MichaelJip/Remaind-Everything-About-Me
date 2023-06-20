@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { Button, Div, Icon, Input, ScrollDiv, Text } from 'react-native-magnus'
-import { useNavigation } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import { COLOR_PRIMARY } from '../../helper/theme';
-import { Responsive } from '../../helper/Responsive';
-import { KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import { Button, Div, Icon, Input, ScrollDiv, Text } from "react-native-magnus";
+import { useNavigation } from "@react-navigation/native";
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from "react-native-responsive-screen";
+import { COLOR_PRIMARY } from "../../helper/theme";
+import { Responsive } from "../../helper/Responsive";
+import { KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native";
 
 const NewPassword = () => {
   const [password, setPassword] = useState("");
@@ -21,7 +24,8 @@ const NewPassword = () => {
           New Password
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          Set a new password for your reminder app account effortlessly. Secure your data and regain control of your schedule in no time.
+          Set a new password for your reminder app account effortlessly. Secure
+          your data and regain control of your schedule in no time.
         </Text>
       </Div>
       <ScrollDiv
@@ -53,20 +57,22 @@ const NewPassword = () => {
               keyboardType="visible-password"
               w={widthPercentageToDP(87)}
               secureTextEntry={!isPasswordVisible}
-              suffix={<TouchableOpacity
-              style={{ right: 5 }}
-              onPress={() => setPasswordVisible(!isPasswordVisible)}
-            >
-              <Icon
-                name={isPasswordVisible ? 'eye' : 'eye-with-line'}
-                fontSize={16}
-                color="black"
-                fontFamily="Entypo"
-              />
-            </TouchableOpacity>}
-            />            
+              suffix={
+                <TouchableOpacity
+                  style={{ right: 5 }}
+                  onPress={() => setPasswordVisible(!isPasswordVisible)}
+                >
+                  <Icon
+                    name={isPasswordVisible ? "eye" : "eye-with-line"}
+                    fontSize={16}
+                    color="black"
+                    fontFamily="Entypo"
+                  />
+                </TouchableOpacity>
+              }
+            />
           </Div>
-        </KeyboardAvoidingView>        
+        </KeyboardAvoidingView>
         <Button
           w={widthPercentageToDP(87)}
           m={heightPercentageToDP(3)}
@@ -84,4 +90,4 @@ const NewPassword = () => {
   );
 };
 
-export default NewPassword
+export default NewPassword;

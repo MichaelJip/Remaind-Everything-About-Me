@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { Button, Div, Input, ScrollDiv, Text } from 'react-native-magnus'
-import { useNavigation } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import { COLOR_PRIMARY } from '../../helper/theme';
-import { Responsive } from '../../helper/Responsive';
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState } from "react";
+import { Button, Div, Input, ScrollDiv, Text } from "react-native-magnus";
+import { useNavigation } from "@react-navigation/native";
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from "react-native-responsive-screen";
+import { COLOR_PRIMARY } from "../../helper/theme";
+import { Responsive } from "../../helper/Responsive";
+import { KeyboardAvoidingView, Platform } from "react-native";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +23,8 @@ const ForgotPassword = () => {
           Forget Password
         </Text>
         <Text mt={heightPercentageToDP(1)}>
-          Forgot your password? No worries! Easily reset it and regain access to your reminders with just a few simple steps.
+          Forgot your password? No worries! Easily reset it and regain access to
+          your reminders with just a few simple steps.
         </Text>
       </Div>
       <ScrollDiv
@@ -51,9 +55,9 @@ const ForgotPassword = () => {
               onChangeText={(val) => setEmail(val)}
               keyboardType="email-address"
               w={widthPercentageToDP(87)}
-            />            
+            />
           </Div>
-        </KeyboardAvoidingView>        
+        </KeyboardAvoidingView>
         <Button
           w={widthPercentageToDP(87)}
           m={heightPercentageToDP(3)}
@@ -71,4 +75,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword
+export default ForgotPassword;

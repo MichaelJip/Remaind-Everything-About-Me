@@ -6,17 +6,17 @@ import {
 } from "react-native-responsive-screen";
 import { Responsive } from "../../helper/Responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native";
 
 const Settings = () => {
-  const nav = useNavigation<any>()
+  const nav = useNavigation<any>();
   return (
     <Div flex={1} bg="#fff">
       <Div
         justifyContent="center"
         alignSelf="center"
         mt={heightPercentageToDP(5)}
-      >        
+      >
         <Text
           textAlign="center"
           mt={heightPercentageToDP(1)}
@@ -32,7 +32,7 @@ const Settings = () => {
           style={{
             marginLeft: widthPercentageToDP(4),
           }}
-          onPress={() => nav.navigate('Profile')}
+          onPress={() => nav.navigate("Profile")}
           activeOpacity={0.7}
         >
           <Div row>
@@ -50,14 +50,14 @@ const Settings = () => {
               Edit Profile
             </Text>
           </Div>
-        </TouchableOpacity>        
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={{
             marginLeft: widthPercentageToDP(4),
             marginTop: heightPercentageToDP(2),
           }}
-          onPress={() => nav.navigate('Profile')}
+          onPress={() => nav.navigate("Profile")}
           activeOpacity={0.7}
         >
           <Div row>
@@ -75,8 +75,8 @@ const Settings = () => {
               Summary
             </Text>
           </Div>
-        </TouchableOpacity> 
-        
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={{
             marginLeft: widthPercentageToDP(4),

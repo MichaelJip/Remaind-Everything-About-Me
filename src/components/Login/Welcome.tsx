@@ -38,7 +38,9 @@ const Welcome = () => {
             Welcome
           </Text>
           <Text w={widthPercentageToDP(80)}>
-            Stay organized and never miss a beat with our innovative reminder app. Download now and experience effortless scheduling for a more productive life.
+            Stay organized and never miss a beat with our innovative reminder
+            app. Download now and experience effortless scheduling for a more
+            productive life.
           </Text>
           <Div row mt={heightPercentageToDP(2)}>
             <Button
