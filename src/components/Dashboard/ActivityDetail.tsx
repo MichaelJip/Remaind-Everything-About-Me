@@ -12,7 +12,7 @@ const ActivityDetail = () => {
   const props = useRoute<any>();
   const params = props?.params;
   const [playing, setPlaying] = useState(false);
-  const onStateChange = useCallback((state:any) => {
+  const onStateChange = useCallback((state: any) => {
     if (state === "ended") {
       setPlaying(false);
     }

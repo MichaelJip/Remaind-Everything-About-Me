@@ -11,7 +11,7 @@ import { formatDate } from "../../helper/formatDate";
 import PickerTimerDesign from "../DatePicker/PickerTimerDesign";
 import { useNavigation } from "@react-navigation/native";
 const CardDetail = () => {
-  const nav = useNavigation<any>()
+  const nav = useNavigation<any>();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDateTimeFirst, setSelectedDateTimeFirst] = useState<Date>(
     new Date()
