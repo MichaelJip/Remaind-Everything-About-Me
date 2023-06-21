@@ -5,14 +5,13 @@ import {
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import { useState } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
 import HeadlessDatePicker from "../DatePicker/HeadlessDatePicker";
 import PickerButtonDesign from "../DatePicker/PickerButtonDesign";
 import { formatDate } from "../../helper/formatDate";
 import PickerTimerDesign from "../DatePicker/PickerTimerDesign";
+import { useNavigation } from "@react-navigation/native";
 const CardDetail = () => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const nav = useNavigation<any>()
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDateTimeFirst, setSelectedDateTimeFirst] = useState<Date>(
     new Date()
@@ -20,10 +19,6 @@ const CardDetail = () => {
   const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<Date>(
     new Date()
   );
-  const [items, setItems] = useState([
-    { label: "Push Up 20x", value: "a" },
-    { label: "Nasi dan sayur bayam", value: "b" },
-  ]);
   return (
     <Div flex={1} bg="#fff">
       <Div p={10}>
@@ -77,16 +72,19 @@ const CardDetail = () => {
 
       <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Recommendation:{" "}
+          Activity:
         </Text>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-        />
+        <Button
+          w={widthPercentageToDP(95)}
+          color="#000"
+          borderColor="#000"
+          borderWidth={1}
+          bg="transparent"
+          mt={heightPercentageToDP(1)}
+          onPress={() => nav.navigate("Activity")}
+        >
+          Choose Activity
+        </Button>
       </Div>
 
       <Div row justifyContent="space-between">

@@ -105,7 +105,7 @@ const Dashboard = () => {
             >
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s,{" "}
+              ever since the 1500s
             </Text>
           </Div>
           <Div

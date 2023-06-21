@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Div, Icon, Image, Text } from "react-native-magnus";
 import {
   heightPercentageToDP,
@@ -7,9 +7,47 @@ import {
 import { Responsive } from "../../helper/Responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import Modal from "react-native-modal";
+import { Pressable } from "react-native";
+import { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
+import { FlashList } from "@shopify/flash-list";
 
 const Settings = () => {
   const nav = useNavigation<any>();
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const data = [
+    {
+      title: 'Family Vacation',
+      category: 'Lainnya',
+      desc: 'A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.'      
+    },
+    {
+      title: 'Family Vacation',
+      category: 'Lainnya',
+      desc: 'A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.'      
+    },
+    {
+      title: 'Family Vacation',
+      category: 'Lainnya',
+      desc: 'A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.'      
+    },  
+  ]
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const list = ({item}:any) => {
+    return(
+      <Div p={10}>
+              <Text fontSize={Responsive(20)} fontWeight="500" color="#000">{item?.title}</Text>
+              <Text fontSize={Responsive(18)}>{item?.category}</Text>
+              <Text w={widthPercentageToDP(80)} fontSize={Responsive(12)} color="#000">{item?.desc}</Text>
+            </Div>
+    )
+  }
+
   return (
     <Div flex={1} bg="#fff">
       <Div
@@ -57,7 +95,7 @@ const Settings = () => {
             marginLeft: widthPercentageToDP(4),
             marginTop: heightPercentageToDP(2),
           }}
-          onPress={() => nav.navigate("Profile")}
+          onPress={toggleModal}
           activeOpacity={0.7}
         >
           <Div row>
@@ -76,7 +114,19 @@ const Settings = () => {
             </Text>
           </Div>
         </TouchableOpacity>
-
+        <Modal isVisible={isModalVisible} hasBackdrop={true} animationIn={'fadeIn'} animationOut={'fadeOut'}>
+          <Div flex={1} bg="#fff" rounded={10}>
+            <Pressable style={{justifyContent: 'flex-end'}} onPress={toggleModal}>
+              <Icon fontFamily="FontAwesome" name="close" fontSize={Responsive(24)} color="#000" alignSelf="flex-end" mr={widthPercentageToDP(3)} mt={heightPercentageToDP(2)} />
+            </Pressable>
+            <Text p={10} fontSize={Responsive(18)}>Hi, Michael!</Text>          
+            <Text p={10} fontSize={Responsive(16)} color="#000">Here's a summary of your latest uploads:</Text>
+            <FlashList 
+              data={data}
+              renderItem={list}
+            />
+          </Div>
+        </Modal>
         <TouchableOpacity
           style={{
             marginLeft: widthPercentageToDP(4),

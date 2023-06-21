@@ -81,7 +81,7 @@ const Task = () => {
 
       <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Activity:{" "}
+          Activity:
         </Text>
         <Button
           w={widthPercentageToDP(95)}
