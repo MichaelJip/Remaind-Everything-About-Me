@@ -9,12 +9,58 @@ import {
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import Toast from 'react-native-toast-message';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const nav = useNavigation<any>();
+  const login = async (email, password) => {
+    try {
+      if (!email || !password) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Please enter both email and password',
+        });
+        return;
+      }
+  
+      const response = await axios.post('https://reminderapss.rianricardo.me/loginnew', {
+        email: email,
+        password: password
+      }).then((res) => {       
+        if (res?.data?.Respone != 0) {
+          Toast.show({
+            type: 'success',
+            text1: 'Welcome',
+          });
+        
+          // to make sure you can't go back to the login screen when already logged in
+          nav.navigate('Dashboard');
+        
+        } else{          
+          
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Email or Password Wrong',
+        });
+      }
+      });
+ 
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occurred during login',
+      });
+      console.warn(error);
+    }
+  };
+  
   return (
     <Div flex={1} bg={COLOR_PRIMARY}>
       <Div
@@ -106,7 +152,7 @@ const Login = () => {
           fontSize={Responsive(16)}
           fontWeight="500"
           rounded={16}
-          onPress={() => nav.navigate("Dashboard")}
+          onPress={() => login(email, password)}
         >
           Sign In
         </Button>

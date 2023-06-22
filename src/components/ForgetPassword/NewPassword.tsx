@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Div, Icon, Input, ScrollDiv, Text } from "react-native-magnus";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -8,11 +8,59 @@ import {
 import { COLOR_PRIMARY } from "../../helper/theme";
 import { Responsive } from "../../helper/Responsive";
 import { KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native";
+import axios from "axios";
+import Toast from 'react-native-toast-message';
 
 const NewPassword = () => {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const route = useRoute()
+  const params = route?.params
   const nav = useNavigation<any>();
+
+  const changePassword = async (password) => {
+    try {
+      if (!password) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Please enter password',
+        });
+        return;
+      }
+  
+      const response = await axios.post('https://reminderapss.rianricardo.me/newpass', {
+        email: params?.sendEmail,
+        password: password
+      }).then((res) => {       
+        if (res?.data?.Respone != 0) {
+          Toast.show({
+            type: 'success',
+            text1: 'Berhasil Ganti Password',
+            text2: 'Selamat Datang kembali di Remind Everything'
+          });
+        
+          // to make sure you can't go back to the login screen when already logged in
+          nav.navigate('Login');
+        
+        } else{                    
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Email or Password Wrong',
+        });
+      }
+      });
+ 
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occurred during login',
+      });
+      console.warn(error);
+    }
+  };
   return (
     <Div flex={1} bg={COLOR_PRIMARY}>
       <Div
@@ -81,7 +129,7 @@ const NewPassword = () => {
           fontSize={Responsive(16)}
           fontWeight="500"
           rounded={16}
-          onPress={() => nav.navigate("Login")}
+          onPress={() => changePassword(password)}
         >
           Submit
         </Button>
