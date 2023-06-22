@@ -6,7 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import { Responsive } from "../../helper/Responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import { Pressable } from "react-native";
 import {
@@ -17,7 +17,7 @@ import {
 import { FlashList } from "@shopify/flash-list";
 
 const Settings = () => {
-  const nav = useNavigation<any>();
+  const nav = useNavigation<any>();    
   const [isModalVisible, setModalVisible] = useState(false);
 
   const data = [
@@ -73,7 +73,7 @@ const Settings = () => {
           fontSize={Responsive(20)}
           fontWeight="500"
         >
-          Michael
+          {/* Michael */}
         </Text>
       </Div>
 

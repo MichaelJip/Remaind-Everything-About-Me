@@ -31,15 +31,20 @@ const Login = () => {
       const response = await axios.post('https://reminderapss.rianricardo.me/loginnew', {
         email: email,
         password: password
-      }).then((res) => {       
+      }).then((res) => {    
+        console.log(res?.data, 'check data res login')
+        const name = res?.data?.result[0]?.username 
         if (res?.data?.Respone != 0) {
           Toast.show({
             type: 'success',
-            text1: 'Welcome',
+            text1: `Welcome ${name}`,
+            text2: "Welcome to our user-friendly reminder app!"
           });
         
           // to make sure you can't go back to the login screen when already logged in
-          nav.navigate('Dashboard');
+          nav.navigate('Dashboard', {
+            name: name
+          });
         
         } else{          
           
