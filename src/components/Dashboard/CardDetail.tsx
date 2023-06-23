@@ -9,9 +9,14 @@ import HeadlessDatePicker from "../DatePicker/HeadlessDatePicker";
 import PickerButtonDesign from "../DatePicker/PickerButtonDesign";
 import { formatDate } from "../../helper/formatDate";
 import PickerTimerDesign from "../DatePicker/PickerTimerDesign";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 const CardDetail = () => {
+  const route = useRoute()
+  const params = route?.params
+  console.log(params, 'check update Task')
   const nav = useNavigation<any>();
+  const [title, setTitle] = useState("");
+  const [note, setNote] = useState("");  
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDateTimeFirst, setSelectedDateTimeFirst] = useState<Date>(
     new Date()
@@ -23,9 +28,9 @@ const CardDetail = () => {
     <Div flex={1} bg="#fff">
       <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Title:{" "}
+          Title:
         </Text>
-        <Input placeholder="Title...." mt={heightPercentageToDP(0.5)} />
+        <Input placeholder="Title...." mt={heightPercentageToDP(0.5)} value={title === '' ? params?.title : title} onChangeText={(val) => setTitle(val)} />
       </Div>
 
       <Div p={10}>
@@ -38,7 +43,7 @@ const CardDetail = () => {
         >
           <PickerButtonDesign
             title="Choose Date"
-            value={formatDate(selectedDate)}
+            value={formatDate(selectedDate ? params?.date : selectedDate)}
           />
         </HeadlessDatePicker>
       </Div>
@@ -67,7 +72,7 @@ const CardDetail = () => {
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Note:{" "}
         </Text>
-        <Input placeholder="Note...." mt={heightPercentageToDP(0.5)} />
+        <Input placeholder="Note...." mt={heightPercentageToDP(0.5)} value={note === '' ? params?.note : note} onChangeText={(val) => setNote(val)}/>
       </Div>
 
       <Div p={10}>

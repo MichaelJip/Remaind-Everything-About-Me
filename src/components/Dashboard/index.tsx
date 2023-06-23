@@ -17,17 +17,20 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import axios from "axios";
+import moment from "moment";
 
 const Dashboard = ({ username }: any) => {
   const name = username;
   const nav = useNavigation<any>();
+  const [dbData, setData] = useState()
+  console.log(dbData, 'check db data')
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `https://reminderapss.rianricardo.me/listtaks/${name}`
       );
       const data = response?.data;
-      console.log(data);
+      setData(data)
     } catch (error) {
       console.log("There is an error:", error);
     }
@@ -82,19 +85,16 @@ const Dashboard = ({ username }: any) => {
     );
   };
 
-  const dataNotif = [
-    { title: "Morning Walk", category: "Olahraga", time: "06:30" },
-
-    { title: "Makan Siang", category: "Makan", time: "11:55" },
-
-    { title: "Tidur Sore", category: "Tidur", time: "15:00" },
-
-    { title: "Push Up", category: "Olahraga", time: "18:00" },
-  ];
-
   const CardNotif = ({ item }: any) => {
     return (
-      <Pressable onPress={() => nav.navigate("TaskDetail")}>
+      <Pressable onPress={() => nav.navigate("TaskDetail", {
+        title: item?.judul,
+        note: item?.note,
+        category: item?.kategori,
+        start: item?.waktu_awal,
+        end: item?.waktu_akhir,
+        date: item?.tanggal
+      })}>
         <Div
           row
           justifyContent="space-between"
@@ -111,27 +111,37 @@ const Dashboard = ({ username }: any) => {
         >
           <Div ml={widthPercentageToDP(2)} mt={heightPercentageToDP(1)}>
             <Text fontWeight="bold" fontSize={Responsive(20)}>
-              {item?.title}
+              {item?.judul}
             </Text>
-            <Text fontSize={Responsive(16)}>{item?.category}</Text>
+            <Text fontSize={Responsive(16)}>{item?.kategori}</Text>
             <Text
               fontSize={Responsive(12)}
               w={widthPercentageToDP(60)}
               numberOfLines={2}
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s
+              {item?.note}
             </Text>
           </Div>
-          <Div
-            mr={widthPercentageToDP(2)}
-            mt={heightPercentageToDP(1)}
-            justifyContent="center"
-          >
-            <Text fontWeight="bold" fontSize={Responsive(24)}>
-              {item?.time}
-            </Text>
+          <Div justifyContent="center">
+            <Div
+              mr={widthPercentageToDP(2)}
+              // mt={heightPercentageToDP(1)}
+              justifyContent="center"
+            >
+              <Text fontWeight="bold" fontSize={Responsive(16)} color="green">
+              {item?.waktu_awal}
+              </Text>
+            </Div>
+            <Div h={heightPercentageToDP(0.3)} bg="#c4c4c4" mr={widthPercentageToDP(2)} />
+            <Div
+              mr={widthPercentageToDP(2)}
+              // mt={heightPercentageToDP(1)}
+              justifyContent="center"
+            >
+              <Text fontWeight="bold" fontSize={Responsive(16)} color="red">
+                {item?.waktu_akhir}
+              </Text>
+            </Div>
           </Div>
         </Div>
       </Pressable>
@@ -143,7 +153,7 @@ const Dashboard = ({ username }: any) => {
       <ScrollView>
         <Div flex={1}>
           <ChartComponent />
-          <FlashList data={dataNotif} renderItem={CardNotif} />
+          <FlashList data={dbData} renderItem={CardNotif} />
         </Div>
       </ScrollView>
       <Div position="absolute" bottom={24} right={24}>
@@ -174,6 +184,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginBottom: heightPercentageToDP(1),
+    backgroundColor: '#fff',
+    elevation: 4
   },
 });
 

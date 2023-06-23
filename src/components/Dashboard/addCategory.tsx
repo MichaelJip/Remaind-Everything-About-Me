@@ -190,6 +190,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginBottom: heightPercentageToDP(1),
+    backgroundColor: '#fff',
+    elevation: 4
   },
 });
 
