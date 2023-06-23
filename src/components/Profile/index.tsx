@@ -12,7 +12,7 @@ import { formatDate } from "../../helper/formatDate";
 import { useRoute } from "@react-navigation/native";
 
 const EditProfile = () => {
-  const route = useRoute()
+  const route = useRoute<any>()
   const params = route?.params
   console.log(params, 'console dalam edit profile')
   const [open, setOpen] = useState(false);
@@ -33,14 +33,14 @@ const EditProfile = () => {
         </Text>        
       </Div>
 
-      <Div p={10} row>
+      <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           DOB:
         </Text>
-        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+        {/* <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
           {params?.dob}
-        </Text>
-        {/* <HeadlessDatePicker
+        </Text> */}
+        <HeadlessDatePicker
           selectedDate={selectedDate}
           onChangeDate={setSelectedDate}
         >
@@ -48,7 +48,7 @@ const EditProfile = () => {
             title="Date Of Birth"
             value={formatDate(selectedDate)}
           />
-        </HeadlessDatePicker> */}
+        </HeadlessDatePicker>
       </Div>
 
       <Div p={10} row>

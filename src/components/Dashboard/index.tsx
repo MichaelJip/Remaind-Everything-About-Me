@@ -16,12 +16,24 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
+import axios from "axios";
 
-const Dashboard = () => {
-  const route = useRoute()
-  console.log(route)
+const Dashboard = ({username}:any) => {
+  const name = username  
   const nav = useNavigation<any>();
+  const fetchData = async () => {
+  try {
+    const response = await axios.get(`https://reminderapss.rianricardo.me/listtaks/${name}`);
+    const data = response?.data;       
+    console.log(data);
+  } catch (error) {
+    console.log('There is an error:', error);
+  }
+};
 
+useEffect(() => {
+  fetchData();
+}, []);
   const data = {
     data: [0.2],
   };

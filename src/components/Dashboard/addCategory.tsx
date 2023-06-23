@@ -11,107 +11,83 @@ import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const AddCategory = () => {
   const nav = useNavigation<any>();
   const [visible, setVisible] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState<any>([]);
+  const data = [
+    {
+      judul: 'OLAHRAGA',    
+    },
+    {
+      judul: 'MAKAN',    
+    },
+    {
+      judul: 'TIDUR',    
+    },
+    {
+      judul: 'MINUM',    
+    },
+    {
+      judul: 'BERMAIN',    
+    },
+  ]
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  const fetchCategories = async () => {
+  try {
+    const storedCategories = await AsyncStorage.getItem("categories");
+    if (storedCategories) {
+      const parsedCategories = JSON.parse(storedCategories);
+      setCategories(parsedCategories); // Update categories with parsed categories only
+    } else {
+      setCategories(data);
+    }
+  } catch (error) {
+    console.log("Error fetching categories:", error);
+  }
+};
 
-  const loadCategories = async () => {
-    try {
-      const storedCategories = await AsyncStorage.getItem("categories");
-      if (storedCategories !== null) {
-        const parsedCategories = JSON.parse(storedCategories);
-        setCategories([...data, ...parsedCategories]);
-      } else {
-        setCategories(data);
-      }
-    } catch (error) {
-      console.log("Error loading categories:", error);
+  const addCategory = () => {
+    if (categoryName.trim() !== "") {
+      const newCategory = { judul: categoryName };
+      const updatedCategories = [...categories, newCategory];
+      setCategories(updatedCategories);
+      setCategoryName("");
+      setVisible(false);
+      saveCategories(updatedCategories); // Save categories to local storage
     }
   };
 
-  const saveCategories = async (updatedCategories: any) => {
+  const deleteCategory = async (index: number) => {
+    if (index >= data.length) {
+      const updatedCategories = [...categories];
+      updatedCategories.splice(index, 1);
+      setCategories(updatedCategories);
+      saveCategories(updatedCategories); // Update categories in local storage
+    }
+  };
+
+  const saveCategories = async (categories: any) => {
     try {
-      await AsyncStorage.setItem(
-        "categories",
-        JSON.stringify(updatedCategories)
-      );
+      await AsyncStorage.setItem("categories", JSON.stringify(categories));
     } catch (error) {
       console.log("Error saving categories:", error);
     }
   };
 
-  const addCategory = () => {
-    if (categoryName.trim() === "") {
-      return;
-    }
+  useEffect(() => {
+    fetchCategories(); // Fetch categories from local storage on component mount
+  }, []);
 
-    const newCategory = { name: categoryName };
-
-    if (categories.some((category: any) => category.name === categoryName)) {
-      Alert.alert(
-        "Duplicate Category",
-        "A category with the same name already exists."
-      );
-      return;
-    }
-
-    const updatedCategories = [...categories, newCategory];
-    setCategories(updatedCategories);
-    saveCategories(updatedCategories);
-    setCategoryName("");
-    setVisible(false);
-  };
-
-  const deleteCategory = (category: any) => {
-    if (isInitialCategory(category)) {
-      Alert.alert(
-        "Can't be deleted",
-        "This category is part of the initial data and can't be deleted."
-      );
-      return;
-    }
-
-    const updatedCategories = categories.filter(
-      (item: any) => item.name !== category.name
-    );
-    setCategories(updatedCategories);
-    saveCategories(updatedCategories);
-  };
-
-  const isInitialCategory = (category: any) => {
-    return data.some((item: any) => item.name === category.name);
-  };
-
-  const data = [
-    {
-      name: "Olahraga",
-    },
-    {
-      name: "Tidur",
-    },
-    {
-      name: "Makan",
-    },
-    {
-      name: "Minum",
-    },
-    {
-      name: "Lainnya",
-    },
-  ];
-  const cardList = ({ item }: any) => {
+  const cardList = ({ item, index }: any) => {
     return (
       <Pressable
         onPress={() =>
           nav.navigate("Task", {
-            name: item?.name,
+            name: item?.judul,
           })
         }
       >
@@ -129,28 +105,27 @@ const AddCategory = () => {
             fontWeight="500"
             textAlign="center"
           >
-            {item?.name}
+            {item?.judul}
           </Text>
-          {!isInitialCategory(item) && (
-            <TouchableOpacity
-              onPress={() => deleteCategory(item)}
-              style={{ alignSelf: "center" }}
-            >
+          {index >= data.length && (
+            <TouchableOpacity onPress={() => deleteCategory(index)} style={{
+              alignSelf: 'center'
+            }}>
               <Icon
-                fontFamily="FontAwesome"
-                name="trash"
-                fontSize={Responsive(24)}
+                fontFamily="AntDesign"
+                name="delete"
                 color="red"
+                fontSize={Responsive(24)}
                 mr={widthPercentageToDP(5)}
               />
             </TouchableOpacity>
-          )}
+          )}         
         </Div>
       </Pressable>
     );
   };
   return (
-    <Div flex={1} bg="#fff">
+    <Div flex={1} bg="#fff">      
       <FlashList data={categories} renderItem={cardList} />
       <Div position="absolute" bottom={24} right={24}>
         <TouchableOpacity

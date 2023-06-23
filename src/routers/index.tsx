@@ -88,7 +88,6 @@ const MyBot = ({route}:any) => {
   >
     <Tab.Screen
       name="Dashboard"
-      component={Home}
       options={{
         tabBarLabel: "",
         headerShown: false,
@@ -101,7 +100,9 @@ const MyBot = ({route}:any) => {
           />
         ),
       }}
-    />
+    >
+      {() => <Home params={route} />}
+    </Tab.Screen>
     <Tab.Screen
       name="Status"
       component={Status}
@@ -158,7 +159,7 @@ const MyBot = ({route}:any) => {
 
 const MainDash = createStackNavigator();
 
-const Home = () => (
+const Home = ({params}:any) => (
   <MainDash.Navigator
     screenOptions={{
       headerStyle: {
@@ -169,12 +170,13 @@ const Home = () => (
   >
     <MainDash.Screen
       name="Home"
-      component={Dashboard}
       options={{
         title: "My Reminder",
         headerLeft: () => null,
       }}
-    />
+    >
+      {() => <Dashboard username={params?.params?.params?.username} />}
+    </MainDash.Screen>
     <MainDash.Screen
       name="Category"
       component={AddCategory}
