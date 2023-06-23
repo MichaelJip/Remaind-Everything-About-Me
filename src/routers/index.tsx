@@ -76,90 +76,91 @@ export const Router = () => {
 
 const Tab = createBottomTabNavigator();
 
-const MyBot = ({route}:any) => {
+const MyBot = ({ route }: any) => {
   // console.log(route, 'route my bot')
   return (
-  <Tab.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: COLOR_PRIMARY,
-      },
-    }}
-  >
-    <Tab.Screen
-      name="Dashboard"
-      options={{
-        tabBarLabel: "",
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <TabbarIcon
-            routeName="Home"
-            focused={focused}
-            iconName="home"
-            iconFrom=""
-          />
-        ),
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLOR_PRIMARY,
+        },
       }}
     >
-      {() => <Home params={route} />}
-    </Tab.Screen>
-    <Tab.Screen
-      name="Status"
-      component={Status}
-      options={{
-        tabBarLabel: "",
-        title: "Status",
-        headerTitleAlign: "center",
-        tabBarIcon: ({ focused }) => (
-          <TabbarIcon
-            routeName="Status"
-            focused={focused}
-            iconName="progress-check"
-            iconFrom="MaterialCommunityIcons"
-          />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Calendar"
-      component={CalendarComponent}
-      options={{
-        title: "Calendar",
-        headerTitleAlign: "center",
-        tabBarLabel: "",
-        tabBarIcon: ({ focused }) => (
-          <TabbarIcon
-            routeName="Calendar"
-            focused={focused}
-            iconName="calendar"
-            iconFrom=""
-          />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Settings"      
-      options={{
-        headerShown: false,
-        tabBarLabel: "",
-        tabBarIcon: ({ focused }) => (
-          <TabbarIcon
-            routeName="Settings"
-            focused={focused}
-            iconName="settings"
-            iconFrom="Feather"
-          />
-        ),
-      }}
-    >
-      {() => <Profile params={route} />}
-    </Tab.Screen>
-  </Tab.Navigator>
-)};
+      <Tab.Screen
+        name="Dashboard"
+        options={{
+          tabBarLabel: "",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabbarIcon
+              routeName="Home"
+              focused={focused}
+              iconName="home"
+              iconFrom=""
+            />
+          ),
+        }}
+      >
+        {() => <Home params={route} />}
+      </Tab.Screen>
+      <Tab.Screen
+        name="Status"
+        component={Status}
+        options={{
+          tabBarLabel: "",
+          title: "Status",
+          headerTitleAlign: "center",
+          tabBarIcon: ({ focused }) => (
+            <TabbarIcon
+              routeName="Status"
+              focused={focused}
+              iconName="progress-check"
+              iconFrom="MaterialCommunityIcons"
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarComponent}
+        options={{
+          title: "Calendar",
+          headerTitleAlign: "center",
+          tabBarLabel: "",
+          tabBarIcon: ({ focused }) => (
+            <TabbarIcon
+              routeName="Calendar"
+              focused={focused}
+              iconName="calendar"
+              iconFrom=""
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        options={{
+          headerShown: false,
+          tabBarLabel: "",
+          tabBarIcon: ({ focused }) => (
+            <TabbarIcon
+              routeName="Settings"
+              focused={focused}
+              iconName="settings"
+              iconFrom="Feather"
+            />
+          ),
+        }}
+      >
+        {() => <Profile params={route} />}
+      </Tab.Screen>
+    </Tab.Navigator>
+  );
+};
 
 const MainDash = createStackNavigator();
 
-const Home = ({params}:any) => (
+const Home = ({ params }: any) => (
   <MainDash.Navigator
     screenOptions={{
       headerStyle: {
@@ -217,33 +218,34 @@ const Home = ({params}:any) => (
 
 const ProfileDash = createStackNavigator();
 
-const Profile = ({params}:any) => {  
-  return(
-  <ProfileDash.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: COLOR_PRIMARY,
-      },
-      headerTitleAlign: "center",
-    }}
-  >
-    <ProfileDash.Screen
-      name="Settings"      
-      options={{
-        title: "My Profile",
-        headerLeft: () => null,
+const Profile = ({ params }: any) => {
+  return (
+    <ProfileDash.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLOR_PRIMARY,
+        },
+        headerTitleAlign: "center",
       }}
     >
-      {() => <Settings username={params?.params?.params?.username} />}
-    </ProfileDash.Screen>
-    <ProfileDash.Screen
-      name="Profile"
-      component={EditProfile}
-      options={{
-        title: "Edit Profile",
-      }}
-    />
-  </ProfileDash.Navigator>
-)};
+      <ProfileDash.Screen
+        name="Settings"
+        options={{
+          title: "My Profile",
+          headerLeft: () => null,
+        }}
+      >
+        {() => <Settings username={params?.params?.params?.username} />}
+      </ProfileDash.Screen>
+      <ProfileDash.Screen
+        name="Profile"
+        component={EditProfile}
+        options={{
+          title: "Edit Profile",
+        }}
+      />
+    </ProfileDash.Navigator>
+  );
+};
 
 export default Router;

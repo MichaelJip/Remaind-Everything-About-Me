@@ -9,7 +9,7 @@ import Toast from "react-native-toast-message";
 export default function App() {
   return (
     <NavigationContainer>
-      <Router />      
+      <Router />
       <Toast position="top" />
     </NavigationContainer>
   );

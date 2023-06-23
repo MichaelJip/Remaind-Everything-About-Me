@@ -9,49 +9,49 @@ import { COLOR_PRIMARY } from "../../helper/theme";
 import { Responsive } from "../../helper/Responsive";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import axios from "axios";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const nav = useNavigation<any>();
-  const forgetPassword = async (email:any) => {
+  const forgetPassword = async (email: any) => {
     try {
       if (!email) {
         Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Please enter email',
+          type: "error",
+          text1: "Error",
+          text2: "Please enter email",
         });
         return;
       }
-  
-      const response = await axios.post('https://reminderapss.rianricardo.me/cekemail', {
-        email: email,        
-      }).then((res) => {       
-        if (res?.data?.Respone != 0) {
-          Toast.show({
-            type: 'success',
-            text1: 'Email terdaftar',
-          });
-        
-          // to make sure you can't go back to the login screen when already logged in          
-          nav.navigate("NewPass", {
-            sendEmail: email
-          })
-        } else{          
-          
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Email tidak terdaftar',
+
+      const response = await axios
+        .post("https://reminderapss.rianricardo.me/cekemail", {
+          email: email,
+        })
+        .then((res) => {
+          if (res?.data?.Respone != 0) {
+            Toast.show({
+              type: "success",
+              text1: "Email terdaftar",
+            });
+
+            // to make sure you can't go back to the login screen when already logged in
+            nav.navigate("NewPass", {
+              sendEmail: email,
+            });
+          } else {
+            Toast.show({
+              type: "error",
+              text1: "Error",
+              text2: "Email tidak terdaftar",
+            });
+          }
         });
-      }
-      });
- 
     } catch (error) {
       Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'An error occurred during forget password',
+        type: "error",
+        text1: "Error",
+        text2: "An error occurred during forget password",
       });
       console.warn(error);
     }

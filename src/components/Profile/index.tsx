@@ -12,9 +12,9 @@ import { formatDate } from "../../helper/formatDate";
 import { useRoute } from "@react-navigation/native";
 
 const EditProfile = () => {
-  const route = useRoute<any>()
-  const params = route?.params
-  console.log(params, 'console dalam edit profile')
+  const route = useRoute<any>();
+  const params = route?.params;
+  console.log(params, "console dalam edit profile");
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("m");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -28,9 +28,13 @@ const EditProfile = () => {
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Name:
         </Text>
-        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+        <Text
+          ml={widthPercentageToDP(2)}
+          fontSize={Responsive(20)}
+          color="#000"
+        >
           {params?.name}
-        </Text>        
+        </Text>
       </Div>
 
       <Div p={10}>
@@ -55,7 +59,11 @@ const EditProfile = () => {
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Email:
         </Text>
-        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+        <Text
+          ml={widthPercentageToDP(2)}
+          fontSize={Responsive(20)}
+          color="#000"
+        >
           {params?.email}
         </Text>
         {/* <Input
@@ -67,9 +75,13 @@ const EditProfile = () => {
 
       <Div p={10} row>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Gender: 
+          Gender:
         </Text>
-        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+        <Text
+          ml={widthPercentageToDP(2)}
+          fontSize={Responsive(20)}
+          color="#000"
+        >
           {params?.gender}
         </Text>
         {/* <DropDownPicker

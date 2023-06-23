@@ -7,7 +7,7 @@ import {
 import { Responsive } from "../../helper/Responsive";
 import { COLOR_PRIMARY } from "../../helper/theme";
 import { Alert, Pressable, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,40 +15,43 @@ import axios from "axios";
 
 const AddCategory = () => {
   const nav = useNavigation<any>();
+  const route = useRoute()
+  const params = route?.params
+  console.log(params)
   const [visible, setVisible] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState<any>([]);
   const data = [
     {
-      judul: 'OLAHRAGA',    
+      judul: "OLAHRAGA",
     },
     {
-      judul: 'MAKAN',    
+      judul: "MAKAN",
     },
     {
-      judul: 'TIDUR',    
+      judul: "TIDUR",
     },
     {
-      judul: 'MINUM',    
+      judul: "MINUM",
     },
     {
-      judul: 'BERMAIN',    
+      judul: "BERMAIN",
     },
-  ]
+  ];
 
   const fetchCategories = async () => {
-  try {
-    const storedCategories = await AsyncStorage.getItem("categories");
-    if (storedCategories) {
-      const parsedCategories = JSON.parse(storedCategories);
-      setCategories(parsedCategories); // Update categories with parsed categories only
-    } else {
-      setCategories(data);
+    try {
+      const storedCategories = await AsyncStorage.getItem("categories");
+      if (storedCategories) {
+        const parsedCategories = JSON.parse(storedCategories);
+        setCategories(parsedCategories); // Update categories with parsed categories only
+      } else {
+        setCategories(data);
+      }
+    } catch (error) {
+      console.log("Error fetching categories:", error);
     }
-  } catch (error) {
-    console.log("Error fetching categories:", error);
-  }
-};
+  };
 
   const addCategory = () => {
     if (categoryName.trim() !== "") {
@@ -88,6 +91,7 @@ const AddCategory = () => {
         onPress={() =>
           nav.navigate("Task", {
             name: item?.judul,
+            username: params?.username
           })
         }
       >
@@ -108,9 +112,12 @@ const AddCategory = () => {
             {item?.judul}
           </Text>
           {index >= data.length && (
-            <TouchableOpacity onPress={() => deleteCategory(index)} style={{
-              alignSelf: 'center'
-            }}>
+            <TouchableOpacity
+              onPress={() => deleteCategory(index)}
+              style={{
+                alignSelf: "center",
+              }}
+            >
               <Icon
                 fontFamily="AntDesign"
                 name="delete"
@@ -119,13 +126,13 @@ const AddCategory = () => {
                 mr={widthPercentageToDP(5)}
               />
             </TouchableOpacity>
-          )}         
+          )}
         </Div>
       </Pressable>
     );
   };
   return (
-    <Div flex={1} bg="#fff">      
+    <Div flex={1} bg="#fff">
       <FlashList data={categories} renderItem={cardList} />
       <Div position="absolute" bottom={24} right={24}>
         <TouchableOpacity

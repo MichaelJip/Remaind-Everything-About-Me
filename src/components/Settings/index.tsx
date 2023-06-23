@@ -17,29 +17,31 @@ import {
 import { FlashList } from "@shopify/flash-list";
 import axios from "axios";
 
-const Settings = ({username}:any) => {
-  const name = username
-  const [dob,setDob] = useState('') 
-  const [email, setEmail] = useState('') 
-  const [gender, setGender] = useState('')
-  const nav = useNavigation<any>();    
+const Settings = ({ username }: any) => {
+  const name = username;
+  const [dob, setDob] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const nav = useNavigation<any>();
   const [isModalVisible, setModalVisible] = useState(false);
   const fetchData = async () => {
-  try {
-    const response = await axios.get(`https://reminderapss.rianricardo.me/userprofile/${name}`);
-    const data = response.data[0];   
-    setDob(data?.dob)
-    setEmail(data?.email)
-    setGender(data?.gender) 
-    console.log(data);
-  } catch (error) {
-    console.log('There is an error:', error);
-  }
-};
+    try {
+      const response = await axios.get(
+        `https://reminderapss.rianricardo.me/userprofile/${name}`
+      );
+      const data = response.data[0];
+      setDob(data?.dob);
+      setEmail(data?.email);
+      setGender(data?.gender);
+      console.log(data);
+    } catch (error) {
+      console.log("There is an error:", error);
+    }
+  };
 
-useEffect(() => {
-  fetchData();
-}, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
   const data = [
     {
       title: "Family Vacation",
@@ -102,12 +104,14 @@ useEffect(() => {
           style={{
             marginLeft: widthPercentageToDP(4),
           }}
-          onPress={() => nav.navigate("Profile", {
-            name: name,
-            dob: dob,
-            email:email,
-            gender: gender,
-          })}
+          onPress={() =>
+            nav.navigate("Profile", {
+              name: name,
+              dob: dob,
+              email: email,
+              gender: gender,
+            })
+          }
           activeOpacity={0.7}
         >
           <Div row>
