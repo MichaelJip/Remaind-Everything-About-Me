@@ -76,7 +76,9 @@ export const Router = () => {
 
 const Tab = createBottomTabNavigator();
 
-const MyBot = () => (
+const MyBot = ({route}:any) => {
+  // console.log(route, 'route my bot')
+  return (
   <Tab.Navigator
     screenOptions={{
       headerStyle: {
@@ -135,8 +137,7 @@ const MyBot = () => (
       }}
     />
     <Tab.Screen
-      name="Settings"
-      component={Profile}
+      name="Settings"      
       options={{
         headerShown: false,
         tabBarLabel: "",
@@ -149,9 +150,11 @@ const MyBot = () => (
           />
         ),
       }}
-    />
+    >
+      {() => <Profile params={route} />}
+    </Tab.Screen>
   </Tab.Navigator>
-);
+)};
 
 const MainDash = createStackNavigator();
 
@@ -212,7 +215,8 @@ const Home = () => (
 
 const ProfileDash = createStackNavigator();
 
-const Profile = () => (
+const Profile = ({params}:any) => {  
+  return(
   <ProfileDash.Navigator
     screenOptions={{
       headerStyle: {
@@ -222,13 +226,14 @@ const Profile = () => (
     }}
   >
     <ProfileDash.Screen
-      name="Settings"
-      component={Settings}
+      name="Settings"      
       options={{
         title: "My Profile",
         headerLeft: () => null,
       }}
-    />
+    >
+      {() => <Settings username={params?.params?.params?.username} />}
+    </ProfileDash.Screen>
     <ProfileDash.Screen
       name="Profile"
       component={EditProfile}
@@ -237,6 +242,6 @@ const Profile = () => (
       }}
     />
   </ProfileDash.Navigator>
-);
+)};
 
 export default Router;

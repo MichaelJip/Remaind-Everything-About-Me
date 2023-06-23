@@ -14,10 +14,12 @@ import {
   TouchableOpacity,
   Animated,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 
 const Dashboard = () => {
+  const route = useRoute()
+  console.log(route)
   const nav = useNavigation<any>();
 
   const data = {

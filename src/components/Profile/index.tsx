@@ -9,8 +9,12 @@ import DropDownPicker from "react-native-dropdown-picker";
 import HeadlessDatePicker from "../DatePicker/HeadlessDatePicker";
 import PickerButtonDesign from "../DatePicker/PickerButtonDesign";
 import { formatDate } from "../../helper/formatDate";
+import { useRoute } from "@react-navigation/native";
 
 const EditProfile = () => {
+  const route = useRoute()
+  const params = route?.params
+  console.log(params, 'console dalam edit profile')
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("m");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -20,22 +24,23 @@ const EditProfile = () => {
   ]);
   return (
     <Div flex={1} bg="#fff">
-      <Div p={10}>
+      <Div p={10} row>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Name:{" "}
+          Name:
         </Text>
-        <Input
-          placeholder="Name...."
-          value="Michael"
-          mt={heightPercentageToDP(0.5)}
-        />
+        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+          {params?.name}
+        </Text>        
       </Div>
 
-      <Div p={10}>
+      <Div p={10} row>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          DOB:{" "}
+          DOB:
         </Text>
-        <HeadlessDatePicker
+        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+          {params?.dob}
+        </Text>
+        {/* <HeadlessDatePicker
           selectedDate={selectedDate}
           onChangeDate={setSelectedDate}
         >
@@ -43,35 +48,41 @@ const EditProfile = () => {
             title="Date Of Birth"
             value={formatDate(selectedDate)}
           />
-        </HeadlessDatePicker>
+        </HeadlessDatePicker> */}
       </Div>
 
-      <Div p={10}>
+      <Div p={10} row>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Email:{" "}
+          Email:
         </Text>
-        <Input
+        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+          {params?.email}
+        </Text>
+        {/* <Input
           placeholder="email...."
           value="michael068@binus.ac.id"
           mt={heightPercentageToDP(0.5)}
-        />
+        /> */}
       </Div>
 
-      <Div p={10}>
+      <Div p={10} row>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Gender:{" "}
+          Gender: 
         </Text>
-        <DropDownPicker
+        <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
+          {params?.gender}
+        </Text>
+        {/* <DropDownPicker
           open={open}
           value={value}
           items={items}
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
-        />
+        /> */}
       </Div>
 
-      <Button
+      {/* <Button
         w={widthPercentageToDP(95)}
         ml={widthPercentageToDP(3)}
         mr={widthPercentageToDP(3)}
@@ -80,7 +91,7 @@ const EditProfile = () => {
         fontWeight="bold"
       >
         Simpan
-      </Button>
+      </Button> */}
     </Div>
   );
 };

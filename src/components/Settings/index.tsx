@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Div, Icon, Image, Text } from "react-native-magnus";
 import {
   heightPercentageToDP,
@@ -15,11 +15,31 @@ import {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list";
+import axios from "axios";
 
-const Settings = () => {
+const Settings = ({username}:any) => {
+  const name = username
+  const [dob,setDob] = useState('') 
+  const [email, setEmail] = useState('') 
+  const [gender, setGender] = useState('')
   const nav = useNavigation<any>();    
   const [isModalVisible, setModalVisible] = useState(false);
+  const fetchData = async () => {
+  try {
+    const response = await axios.get(`https://reminderapss.rianricardo.me/userprofile/${name}`);
+    const data = response.data[0];   
+    setDob(data?.dob)
+    setEmail(data?.email)
+    setGender(data?.gender) 
+    console.log(data);
+  } catch (error) {
+    console.log('There is an error:', error);
+  }
+};
 
+useEffect(() => {
+  fetchData();
+}, []);
   const data = [
     {
       title: "Family Vacation",
@@ -73,7 +93,7 @@ const Settings = () => {
           fontSize={Responsive(20)}
           fontWeight="500"
         >
-          {/* Michael */}
+          {name}
         </Text>
       </Div>
 
@@ -82,7 +102,12 @@ const Settings = () => {
           style={{
             marginLeft: widthPercentageToDP(4),
           }}
-          onPress={() => nav.navigate("Profile")}
+          onPress={() => nav.navigate("Profile", {
+            name: name,
+            dob: dob,
+            email:email,
+            gender: gender,
+          })}
           activeOpacity={0.7}
         >
           <Div row>

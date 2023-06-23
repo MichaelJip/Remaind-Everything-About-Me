@@ -9,18 +9,69 @@ import {
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
+import Toast from "react-native-toast-message";
+import axios from 'axios'
+import { useNavigation } from "@react-navigation/native";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const nav = useNavigation<any>()
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: "Male", value: "m" },
-    { label: "Female", value: "f" },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
   ]);
+  // console.warn(value, 'check value')
+  const register = async (username, email, password, gender) => {
+    try {
+      if (!email || !password || !username || !gender) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Please enter the missing value',
+        });
+        return;
+      }
+  
+      const response = await axios.post('https://reminderapss.rianricardo.me/regis', {
+        username: username,
+        email: email,
+        password: password,
+        gender: value,       
+      }).then((res) => {                            
+        if (res?.data?.Respone != 0) {
+          Toast.show({
+            type: 'success',
+            text1: `Welcome To Remind Everything`,
+            text2: "to our user-friendly reminder app!"
+          });
+        
+          // to make sure you can't go back to the login screen when already logged in
+          nav.navigate('Login');
+        
+        } else{          
+          
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: '',
+        });
+      }
+      });
+ 
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occurred during login',
+      });
+      console.warn(error);
+    }
+  };
 
   return (
     <Div flex={1} bg={COLOR_PRIMARY}>
@@ -123,6 +174,7 @@ const Register = () => {
           fontSize={Responsive(16)}
           fontWeight="500"
           rounded={16}
+          onPress={() => register(username, email, password, value)}
         >
           Sign Up
         </Button>
