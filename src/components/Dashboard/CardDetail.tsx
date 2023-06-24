@@ -54,7 +54,7 @@ const CardDetail = () => {
       const response = await axios
         .post("https://reminderapss.rianricardo.me/updatetask", {
           judul: title,          
-          tanggal: selectedDate,
+          tanggal: moment(selectedDate).format(),
           waktu_awal:moment(selectedDateTimeFirst).format(),
           waktu_akhir:moment(selectedDateTimeLast).format(),
           note: note,

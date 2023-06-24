@@ -121,8 +121,7 @@ const MyBot = ({ route }: any) => {
         }}
       />
       <Tab.Screen
-        name="Calendar"
-        component={CalendarComponent}
+        name="Calendar"        
         options={{
           title: "Calendar",
           headerTitleAlign: "center",
@@ -136,7 +135,9 @@ const MyBot = ({ route }: any) => {
             />
           ),
         }}
-      />
+      >
+        {() => <CalendarComponent username={route} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Settings"
         options={{

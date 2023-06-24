@@ -5,21 +5,15 @@ import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import axios from "axios";
 
-const CalendarComponent = () => {
-  const [selected, setSelected] = useState("");
-  const data = [
-    {
-      createdAt: "2023-06-15",
-      desc: "Olahraga",
-      time: "06:00",
-    },
-  ];
-
-  const [dbData, setData] = useState()  
+const CalendarComponent = ({username}:any) => {
+  const name = username
+  const realName = name?.params?.params?.username
+  const [selected, setSelected] = useState<any>("");  
+  const [dbData, setData] = useState<any>([])  
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://reminderapss.rianricardo.me/listtaks/${name}`
+        `https://reminderapss.rianricardo.me/listtaks/${realName}`
       );
       const data = response?.data;
       setData(data)
@@ -37,8 +31,29 @@ const CalendarComponent = () => {
       clearInterval(interval); // Cleanup the interval on component unmount
     };
   }, []);
+
+  const markedDates = dbData.reduce((markedDatesObj:any, item:any) => {
+    const date = moment(item?.tanggal).format("YYYY-MM-DD");
+    return {
+      ...markedDatesObj,
+      [date]: { marked: true, dotColor: "blue" },
+    };
+  }, {});
+
+  const selectedItems = dbData
+  .map((item:any) => {
+    const date = moment(item.tanggal).format("YYYY-MM-DD");
+    const startTime = moment(item.waktu_awal).format("HH:mm");
+    const endTime = moment(item.waktu_akhir).format("HH:mm");
+
+    return { ...item, date, startTime, endTime };
+  })
+  .filter((item:any) => item.date === selected);
+
+  
   const renderItem = ({ item }: any) => {
     const createdAt = moment(item?.date).format("MMM Do YYYY");
+    console.log(item, 'check item')
     return (
       <Div
         bg="#fff"
@@ -51,27 +66,25 @@ const CalendarComponent = () => {
         borderWidth={1}
       >
         <Text>Created at: {createdAt}</Text>
-        <Text>Desc: {item.desc}</Text>
-        <Text>Time: {item?.time}</Text>
+        <Text>Note: {item.note}</Text>
+        <Text>Start: {moment(item?.waktu_awal).format('LT')}</Text>
+        <Text>End: {moment(item?.waktu_akhir).format('LT')}</Text>
       </Div>
     );
   };
+
+  console.log(dbData, 'check db data')
   
   return (
     <Div flex={1} bg="#fff">
       <Calendar
-        // Specify the current date
-        current={"2023-06-15"}
+        current={new Date()}                
         // Callback that gets called when the user selects a day
         onDayPress={(day) => {
           setSelected(day.dateString);
         }}
         // Mark specific dates as marked
-        markedDates={{
-          "2023-06-15": { marked: true, selectedColor: "blue" },
-          "2023-06-16": { marked: true },
-          "2023-06-20": { marked: true, selectedColor: "blue" },
-        }}
+        markedDates={markedDates}
         // markedDates={markedDates}
         // initialDate={initialDate}
         // onDayPress={(day) => {
@@ -84,7 +97,7 @@ const CalendarComponent = () => {
       />
       <Div bg="#fff" flex={1}>
         <FlatList
-          data={data}
+          data={selectedItems}
           // keyExtractor={(item) => item.id}
           renderItem={renderItem}
         />
