@@ -183,7 +183,7 @@ const CardDetail = () => {
           bg="transparent"
           mt={heightPercentageToDP(1)}
           onPress={() => nav.navigate("Activity", {
-            katogri: params?.category
+            kategori: params?.category
           })}
         >
           Choose Activity

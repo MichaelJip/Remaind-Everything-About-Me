@@ -1,8 +1,9 @@
 import { View, Text, FlatList } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Div } from "react-native-magnus";
 import { Calendar } from "react-native-calendars";
 import moment from "moment";
+import axios from "axios";
 
 const CalendarComponent = () => {
   const [selected, setSelected] = useState("");
@@ -13,6 +14,29 @@ const CalendarComponent = () => {
       time: "06:00",
     },
   ];
+
+  const [dbData, setData] = useState()  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `https://reminderapss.rianricardo.me/listtaks/${name}`
+      );
+      const data = response?.data;
+      setData(data)
+    } catch (error) {
+      console.log("There is an error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData();
+    }, 1000); // Fetch data every 10 seconds
+  
+    return () => {
+      clearInterval(interval); // Cleanup the interval on component unmount
+    };
+  }, []);
   const renderItem = ({ item }: any) => {
     const createdAt = moment(item?.date).format("MMM Do YYYY");
     return (
@@ -32,6 +56,7 @@ const CalendarComponent = () => {
       </Div>
     );
   };
+  
   return (
     <Div flex={1} bg="#fff">
       <Calendar

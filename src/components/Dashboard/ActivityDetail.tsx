@@ -7,6 +7,7 @@ import {
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import WebView from "react-native-webview";
+import { Responsive } from "../../helper/Responsive";
 
 const ActivityDetail = () => {
   const props = useRoute<any>();
@@ -40,14 +41,17 @@ const ActivityDetail = () => {
         {params?.title}
       </Text>
       <Text ml={widthPercentageToDP(4)}>Description: </Text>
-      <WebView
+      <Text ml={widthPercentageToDP(4)} fontSize={Responsive(16)} fontWeight="500">
+        {params?.desc}
+      </Text>
+      {/* <WebView
         source={{ uri: params?.website }}
         style={{
           height: heightPercentageToDP(60),
           marginLeft: widthPercentageToDP(4),
           marginRight: widthPercentageToDP(4),
         }}
-      />
+      /> */}
     </Div>
   );
 };

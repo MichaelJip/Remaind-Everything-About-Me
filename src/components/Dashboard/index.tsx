@@ -20,11 +20,9 @@ import axios from "axios";
 import moment from "moment";
 
 const Dashboard = ({ username }: any) => {
-  const name = username;
-  console.log(name)
+  const name = username;  
   const nav = useNavigation<any>();
-  const [dbData, setData] = useState()
-  console.log(dbData, 'check db data')
+  const [dbData, setData] = useState()  
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -40,7 +38,7 @@ const Dashboard = ({ username }: any) => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchData();
-    }, 10000); // Fetch data every 10 seconds
+    }, 1000); // Fetch data every 10 seconds
   
     return () => {
       clearInterval(interval); // Cleanup the interval on component unmount

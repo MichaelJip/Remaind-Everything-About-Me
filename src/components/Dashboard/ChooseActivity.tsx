@@ -14,8 +14,9 @@ const ChooseActivity = () => {
   const nav = useNavigation<any>();
   const route = useRoute()
   const params = route?.params
-  console.log(params)
+  console.log(params, 'dalam activity list')
   const [data, setData] = useState()
+  console.log(data, 'check data dari api')
   // const data = [
   //   {
   //     videoId: "3p8EBPVZ2Iw",
@@ -50,10 +51,11 @@ const ChooseActivity = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://reminderapss.rianricardo.me/listaktiviti/${name}`
+        `https://reminderapss.rianricardo.me/listaktiviti/${params?.kategori}`
       );
       const data = response?.data;
       setData(data)
+      console.log(data, 'dalam respons')
     } catch (error) {
       console.log("There is an error:", error);
     }
@@ -62,7 +64,7 @@ const ChooseActivity = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchData();
-    }, 10000); // Fetch data every 10 seconds
+    }, 100); // Fetch data every 10 seconds
   
     return () => {
       clearInterval(interval); // Cleanup the interval on component unmount
@@ -75,15 +77,15 @@ const ChooseActivity = () => {
         onPress={() =>
           nav.navigate("ActivityDetail", {
             videoLink: item?.videoId,
-            title: item?.title,
-            website: item?.web,
+            title: item?.judul,
+            desc: item?.ket,            
           })
         }
       >
         <Div rounded={10} h={"auto"} style={{ elevation: 4 }} m={10} bg="#fff">
           <Image
             h={heightPercentageToDP(25)}
-            source={{ uri: item?.image }}
+            source={{ uri: item?.link_gambar }}
             ml={10}
             mt={10}
             mr={10}
@@ -95,7 +97,7 @@ const ChooseActivity = () => {
             fontWeight="bold"
             fontSize={16}
           >
-            {item?.title}
+            {item?.judul}
           </Text>
         </Div>
       </TouchableOpacity>
