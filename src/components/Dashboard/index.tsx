@@ -141,7 +141,7 @@ const Dashboard = ({ username }: any) => {
               justifyContent="center"
             >
               <Text fontWeight="bold" fontSize={Responsive(16)} color="green">
-              {moment(item?.waktu_awal).format('LT')}
+              {moment(item?.waktu_awal).format('LT')}              
               </Text>
             </Div>
             <Div h={heightPercentageToDP(0.3)} bg="#c4c4c4" mr={widthPercentageToDP(2)} />

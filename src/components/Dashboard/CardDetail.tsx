@@ -40,8 +40,8 @@ const CardDetail = () => {
         !title ||
         !note ||
         !selectedDate ||
-        selectedDateTimeFirst === new Date() ||
-        selectedDateTimeLast === new Date()
+        !selectedDateTimeFirst ||
+        !selectedDateTimeLast 
       ) {
         Toast.show({
           type: "error",
@@ -55,8 +55,8 @@ const CardDetail = () => {
         .post("https://reminderapss.rianricardo.me/updatetask", {
           judul: title,          
           tanggal: selectedDate,
-          waktu_awal:selectedDateTimeFirst,
-          waktu_akhir:selectedDateTimeLast,
+          waktu_awal:moment(selectedDateTimeFirst).format(),
+          waktu_akhir:moment(selectedDateTimeLast).format(),
           note: note,
           aktifiti: "",
           id_task: params?.id,          
