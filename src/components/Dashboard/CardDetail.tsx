@@ -86,6 +86,39 @@ const CardDetail = () => {
     }
   };
 
+  const deleteTask = async (
+  ) => {
+    try {      
+
+      const response = await axios
+        .post("https://reminderapss.rianricardo.me/deletetask", {      
+          id_task: params?.id,          
+        })
+        .then((res) => {                    
+            if (res?.data?.Respone != 0) {
+              Toast.show({
+                type: "success",
+                text1: `Task have been deleted`,
+              });
+              nav.navigate("Home")
+            } else{
+
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+            });
+          }
+        });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "An error occurred during creating task",
+      });
+      console.log(error);
+    }
+  };
+
   return (
     <ScrollDiv flex={1} bg="#fff">
       <Div p={10}>
@@ -183,6 +216,7 @@ const CardDetail = () => {
           bg="red"
           color="#fff"
           fontWeight="bold"
+          onPress={() => deleteTask()}
         >
           Delete
         </Button>
