@@ -6,7 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import { Responsive } from "../../helper/Responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import { Pressable } from "react-native";
 import {
@@ -190,7 +190,14 @@ const Settings = ({ username }: any) => {
             marginLeft: widthPercentageToDP(4),
             marginTop: heightPercentageToDP(2),
           }}
-          onPress={() => alert("Logout")}
+          onPress={() => nav.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              { name: 'Login', params: { screen: 'Router' } },
+            ],
+          })
+        )}
           activeOpacity={0.7}
         >
           <Div row>

@@ -8,9 +8,10 @@ import {
 } from "react-native-responsive-screen";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -36,13 +37,21 @@ const Login = () => {
         .then((res) => {
           const name = res?.data?.result[0]?.username;
           if (res?.data?.Respone != 0) {
+            
             Toast.show({
               type: "success",
               text1: `Welcome ${name}`,
               text2: "Welcome to our user-friendly reminder app!",
             });
+                      
+            // nav.navigate("Dashboard", {              
+            //   screen: "MyBot",
+            //   params: {
+            //     username: name,
+            //   },
+            // });
 
-            nav.navigate("Dashboard", {
+            nav.replace("Dashboard", {              
               screen: "MyBot",
               params: {
                 username: name,

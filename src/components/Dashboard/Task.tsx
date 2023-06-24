@@ -100,13 +100,13 @@ const Task = () => {
 
               // Schedule push notifications for task reminders
               schedulePushNotification({
-                titles: title,
+                titles: `Mulai ${title}`,
                 bodys: note,
                 dates: notificationDateFirst,
               });
 
               schedulePushNotification({
-                titles: title,
+                titles: `Selesai ${title}`,
                 bodys: note,
                 dates: notificationDateLast,
               });
