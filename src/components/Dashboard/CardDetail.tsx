@@ -118,6 +118,25 @@ const CardDetail = () => {
       console.log(error);
     }
   };
+  const data = [
+    {
+      judul: "OLAHRAGA",
+    },
+    {
+      judul: "MAKAN",
+    },
+    {
+      judul: "TIDUR",
+    },
+    {
+      judul: "MINUM",
+    },
+    {
+      judul: "BERMAIN",
+    },
+  ];
+  const showDiv = data.some(item => item.judul === params?.category);
+
 
   return (
     <ScrollDiv flex={1} bg="#fff">
@@ -171,6 +190,26 @@ const CardDetail = () => {
         <Input placeholder="Note...." mt={heightPercentageToDP(0.5)} value={note} onChangeText={(val) => setNote(val)}/>
       </Div>
 
+      {/* <Div p={10}>
+        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
+          Activity:
+        </Text>
+        <Button
+          w={widthPercentageToDP(95)}
+          color="#000"
+          borderColor="#000"
+          borderWidth={1}
+          bg="transparent"
+          mt={heightPercentageToDP(1)}
+          onPress={() => nav.navigate("Activity", {
+            kategori: params?.category
+          })}
+        >
+          Choose Activity
+        </Button>
+      </Div> */}
+      
+      {showDiv && (
       <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Activity:
@@ -189,7 +228,8 @@ const CardDetail = () => {
           Choose Activity
         </Button>
       </Div>
-      
+    )}
+
       <Div
         bg="#c4c4c4"
         h={heightPercentageToDP(0.5)}
