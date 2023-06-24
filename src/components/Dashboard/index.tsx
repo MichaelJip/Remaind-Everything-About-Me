@@ -37,9 +37,6 @@ const Dashboard = ({ username }: any) => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       fetchData();
