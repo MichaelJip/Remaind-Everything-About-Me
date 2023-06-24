@@ -56,9 +56,12 @@ const Task = () => {
       const response = await axios
         .post("https://reminderapss.rianricardo.me/task", {
           judul: title,
-          tanggal: moment(selectedDate).locale('id').format('YYYY-MM-DD'),
-          waktu_awal: moment(selectedDateTimeFirst).locale('id').format("HH:mm:ss"),
-          waktu_akhir: moment(selectedDateTimeLast).locale('id').format("HH:mm:ss"),
+          // tanggal: moment(selectedDate).locale('id').format('YYYY-MM-DD'),
+          // waktu_awal: moment(selectedDateTimeFirst).locale('id').format("HH:mm:ss"),
+          // waktu_akhir: moment(selectedDateTimeLast).locale('id').format("HH:mm:ss"),
+          tanggal: selectedDate,
+          waktu_awal:selectedDateTimeFirst,
+          waktu_akhir:selectedDateTimeLast,
           note: note,
           aktifiti: "",
           username: params?.username,

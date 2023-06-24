@@ -21,6 +21,7 @@ import moment from "moment";
 
 const Dashboard = ({ username }: any) => {
   const name = username;
+  console.log(name)
   const nav = useNavigation<any>();
   const [dbData, setData] = useState()
   console.log(dbData, 'check db data')
@@ -36,8 +37,17 @@ const Dashboard = ({ username }: any) => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   useEffect(() => {
-    fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 10000); // Fetch data every 10 seconds
+  
+    return () => {
+      clearInterval(interval); // Cleanup the interval on component unmount
+    };
   }, []);
   const data = {
     data: [0.2],
@@ -88,6 +98,8 @@ const Dashboard = ({ username }: any) => {
   const CardNotif = ({ item }: any) => {
     return (
       <Pressable onPress={() => nav.navigate("TaskDetail", {
+        name: username,
+        id: item?.id_task,
         title: item?.judul,
         note: item?.note,
         category: item?.kategori,
@@ -129,7 +141,7 @@ const Dashboard = ({ username }: any) => {
               justifyContent="center"
             >
               <Text fontWeight="bold" fontSize={Responsive(16)} color="green">
-              {item?.waktu_awal}
+              {moment(item?.waktu_awal).format('LT')}
               </Text>
             </Div>
             <Div h={heightPercentageToDP(0.3)} bg="#c4c4c4" mr={widthPercentageToDP(2)} />
@@ -139,7 +151,7 @@ const Dashboard = ({ username }: any) => {
               justifyContent="center"
             >
               <Text fontWeight="bold" fontSize={Responsive(16)} color="red">
-                {item?.waktu_akhir}
+                {moment(item?.waktu_akhir).format('LT')}
               </Text>
             </Div>
           </Div>
