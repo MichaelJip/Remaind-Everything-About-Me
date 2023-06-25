@@ -106,26 +106,26 @@ const EditProfile = () => {
         </HeadlessDatePicker>
       </Div>
 
-      <Div p={10} row>
+      <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Email:
         </Text>
-        <Text
+        {/* <Text
           ml={widthPercentageToDP(2)}
           fontSize={Responsive(20)}
           color="#000"
         >
           {params?.email}
-        </Text>
-        {/* <Input
+        </Text> */}
+        <Input
           placeholder="email...."
           value={email}
           onChangeText={(val) => setEmail(val)}
           mt={heightPercentageToDP(0.5)}
-        /> */}
+        />
       </Div>
 
-      {/* <Div p={10}>
+      <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Password:
         </Text>       
@@ -150,7 +150,7 @@ const EditProfile = () => {
                 </TouchableOpacity>
               }
             />
-      </Div> */}
+      </Div>
 
       <Div p={10} row>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
@@ -173,7 +173,7 @@ const EditProfile = () => {
         /> */}
       </Div>
 
-      {/* <Button
+      <Button
         w={widthPercentageToDP(95)}
         ml={widthPercentageToDP(3)}
         mr={widthPercentageToDP(3)}
@@ -183,7 +183,7 @@ const EditProfile = () => {
         onPress={() => updateProfile(email,password) }
       >
         Simpan
-      </Button> */}
+      </Button>
     </Div>
   );
 };
