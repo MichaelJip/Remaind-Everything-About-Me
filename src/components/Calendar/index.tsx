@@ -72,9 +72,7 @@ const CalendarComponent = ({username}:any) => {
       </Div>
     );
   };
-
-  console.log(dbData, 'check db data')
-  
+    
   return (
     <Div flex={1} bg="#fff">
       <Calendar

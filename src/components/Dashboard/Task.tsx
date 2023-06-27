@@ -22,7 +22,7 @@ import { Platform } from "react-native";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
@@ -45,8 +45,7 @@ const Task = () => {
   const [expoPushToken, setExpoPushToken] = useState<any>('');
   const [notification, setNotification] = useState<any>(false);  
   const notificationListener = useRef<any>();
-  const responseListener = useRef<any>();
-  
+  const responseListener = useRef<any>();  
   const createTask = async (
     title,
     note,
@@ -73,7 +72,7 @@ const Task = () => {
       const response = await axios
         .post("https://reminderapss.rianricardo.me/task", {
           judul: title,          
-          tanggal: moment(selectedDate).format(),
+          tanggal: moment(selectedDate).format('YYYY-MM-DD h:mm:ss'),          
           waktu_awal:moment(selectedDateTimeFirst).format(),
           waktu_akhir:moment(selectedDateTimeLast).format(),
           note: note,
