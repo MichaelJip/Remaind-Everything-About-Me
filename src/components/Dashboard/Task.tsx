@@ -15,8 +15,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import axios from "axios";
 import moment from "moment";
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 import { Platform } from "react-native";
 
 Notifications.setNotificationHandler({
@@ -27,10 +27,10 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Task = () => {  
+const Task = () => {
   const nav = useNavigation<any>();
-  const route = useRoute<any>()
-  const params = route?.params
+  const route = useRoute<any>();
+  const params = route?.params;
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -40,12 +40,12 @@ const Task = () => {
   const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<Date>(
     new Date()
   );
-  
-   //For Notif
-  const [expoPushToken, setExpoPushToken] = useState<any>('');
-  const [notification, setNotification] = useState<any>(false);  
+
+  //For Notif
+  const [expoPushToken, setExpoPushToken] = useState<any>("");
+  const [notification, setNotification] = useState<any>(false);
   const notificationListener = useRef<any>();
-  const responseListener = useRef<any>();  
+  const responseListener = useRef<any>();
   const createTask = async (
     title,
     note,
@@ -71,51 +71,50 @@ const Task = () => {
 
       const response = await axios
         .post("https://reminderapss.rianricardo.me/task", {
-          judul: title,          
-          tanggal: moment(selectedDate).format('YYYY-MM-DD h:mm:ss'),          
-          waktu_awal:moment(selectedDateTimeFirst).format(),
-          waktu_akhir:moment(selectedDateTimeLast).format(),
+          judul: title,
+          tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+          waktu_awal: moment(selectedDateTimeFirst).format(),
+          waktu_akhir: moment(selectedDateTimeLast).format(),
           note: note,
-          aktifiti: "",
+          aktifiti: params?.aktivitas,
           username: params?.username,
-          kategori: params?.name,
+          kategori: params?.kategori,
         })
-        .then((res) => {                    
-            if (res?.data?.Respone != 0) {
-              Toast.show({
-                type: "success",
-                text1: `Task have been created`,
-              });
-
-              const notificationDateFirst = moment(selectedDate)
-                .hour(selectedDateTimeFirst.getHours())
-                .minute(selectedDateTimeFirst.getMinutes())
-                .toDate();
-
-              const notificationDateLast = moment(selectedDate)
-                .hour(selectedDateTimeLast.getHours())
-                .minute(selectedDateTimeLast.getMinutes())
-                .toDate();
-
-              // Schedule push notifications for task reminders
-              schedulePushNotification({
-                titles: `Mulai ${title}`,
-                bodys: note,
-                dates: notificationDateFirst,
-              });
-
-              schedulePushNotification({
-                titles: `Selesai ${title}`,
-                bodys: note,
-                dates: notificationDateLast,
-              });
-
-              nav.navigate("Home")
-            } else{
-
+        .then((res) => {
+          if (res?.data?.Respone != 0) {
             Toast.show({
-              type: 'error',
-              text1: 'Error',
+              type: "success",
+              text1: `Task have been created`,
+            });
+
+            const notificationDateFirst = moment(selectedDate)
+              .hour(selectedDateTimeFirst.getHours())
+              .minute(selectedDateTimeFirst.getMinutes())
+              .toDate();
+
+            const notificationDateLast = moment(selectedDate)
+              .hour(selectedDateTimeLast.getHours())
+              .minute(selectedDateTimeLast.getMinutes())
+              .toDate();
+
+            // Schedule push notifications for task reminders
+            schedulePushNotification({
+              titles: `Mulai ${title}`,
+              bodys: note,
+              dates: notificationDateFirst,
+            });
+
+            schedulePushNotification({
+              titles: `Selesai ${title}`,
+              bodys: note,
+              dates: notificationDateLast,
+            });
+
+            nav.navigate("Home");
+          } else {
+            Toast.show({
+              type: "error",
+              text1: "Error",
             });
           }
         });
@@ -130,18 +129,24 @@ const Task = () => {
   };
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
@@ -199,7 +204,12 @@ const Task = () => {
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Note:{" "}
         </Text>
-        <Input placeholder="Note...." mt={heightPercentageToDP(0.5)} value={note} onChangeText={(val) => setNote(val)} />
+        <Input
+          placeholder="Note...."
+          mt={heightPercentageToDP(0.5)}
+          value={note}
+          onChangeText={(val) => setNote(val)}
+        />
       </Div>
 
       {/* <Div p={10}>
@@ -234,7 +244,15 @@ const Task = () => {
         bg="#000"
         color="#fff"
         fontWeight="bold"
-        onPress={() => createTask(title, note, selectedDate,selectedDateTimeFirst,selectedDateTimeLast)}
+        onPress={() =>
+          createTask(
+            title,
+            note,
+            selectedDate,
+            selectedDateTimeFirst,
+            selectedDateTimeLast
+          )
+        }
       >
         Create
       </Button>
@@ -242,7 +260,7 @@ const Task = () => {
   );
 };
 
-async function schedulePushNotification({titles, bodys, dates}:any) {
+async function schedulePushNotification({ titles, bodys, dates }: any) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: titles,
@@ -253,34 +271,34 @@ async function schedulePushNotification({titles, bodys, dates}:any) {
   });
 }
 
-
 async function registerForPushNotificationsAsync() {
   let token;
 
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
+      lightColor: "#FF231F7C",
     });
   }
 
   if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
+    if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
   } else {
-    alert('Must use physical device for Push Notifications');
+    alert("Must use physical device for Push Notifications");
   }
 
   return token;

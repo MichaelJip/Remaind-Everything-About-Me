@@ -15,9 +15,9 @@ import axios from "axios";
 
 const AddCategory = () => {
   const nav = useNavigation<any>();
-  const route = useRoute()
-  const params = route?.params
-  console.log(params)
+  const route = useRoute();
+  const params = route?.params;
+  console.log(params);
   const [visible, setVisible] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState<any>([]);
@@ -26,7 +26,7 @@ const AddCategory = () => {
       judul: "OLAHRAGA",
     },
     {
-      judul: "MAKAN",
+      judul: "MAKANAN",
     },
     {
       judul: "TIDUR",
@@ -89,9 +89,9 @@ const AddCategory = () => {
     return (
       <Pressable
         onPress={() =>
-          nav.navigate("Task", {
+          nav.navigate("Activity", {
             name: item?.judul,
-            username: params?.username
+            username: params?.username,
           })
         }
       >
@@ -190,8 +190,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginBottom: heightPercentageToDP(1),
-    backgroundColor: '#fff',
-    elevation: 4
+    backgroundColor: "#fff",
+    elevation: 4,
   },
 });
 

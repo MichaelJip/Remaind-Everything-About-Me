@@ -22,7 +22,7 @@ const Settings = ({ username }: any) => {
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("");
   const nav = useNavigation<any>();
   const [isModalVisible, setModalVisible] = useState(false);
   const fetchData = async () => {
@@ -34,8 +34,8 @@ const Settings = ({ username }: any) => {
       setDob(data?.dob);
       setEmail(data?.email);
       setGender(data?.gender);
-      setPassword(data?.password)
-      console.log(data, 'check data profile');
+      setPassword(data?.password);
+      console.log(data, "check data profile");
     } catch (error) {
       console.log("There is an error:", error);
     }
@@ -112,7 +112,7 @@ const Settings = ({ username }: any) => {
               dob: dob,
               email: email,
               gender: gender,
-              password: password
+              password: password,
             })
           }
           activeOpacity={0.7}
@@ -193,14 +193,14 @@ const Settings = ({ username }: any) => {
             marginLeft: widthPercentageToDP(4),
             marginTop: heightPercentageToDP(2),
           }}
-          onPress={() => nav.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              { name: 'Login', params: { screen: 'Router' } },
-            ],
-          })
-        )}
+          onPress={() =>
+            nav.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Login", params: { screen: "Router" } }],
+              })
+            )
+          }
           activeOpacity={0.7}
         >
           <Div row>

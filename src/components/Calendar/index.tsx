@@ -5,18 +5,18 @@ import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import axios from "axios";
 
-const CalendarComponent = ({username}:any) => {
-  const name = username
-  const realName = name?.params?.params?.username
-  const [selected, setSelected] = useState<any>("");  
-  const [dbData, setData] = useState<any>([])  
+const CalendarComponent = ({ username }: any) => {
+  const name = username;
+  const realName = name?.params?.params?.username;
+  const [selected, setSelected] = useState<any>("");
+  const [dbData, setData] = useState<any>([]);
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `https://reminderapss.rianricardo.me/listtaks/${realName}`
       );
       const data = response?.data;
-      setData(data)
+      setData(data);
     } catch (error) {
       console.log("There is an error:", error);
     }
@@ -26,13 +26,13 @@ const CalendarComponent = ({username}:any) => {
     const interval = setInterval(() => {
       fetchData();
     }, 1000); // Fetch data every 10 seconds
-  
+
     return () => {
       clearInterval(interval); // Cleanup the interval on component unmount
     };
   }, []);
 
-  const markedDates = dbData.reduce((markedDatesObj:any, item:any) => {
+  const markedDates = dbData.reduce((markedDatesObj: any, item: any) => {
     const date = moment(item?.tanggal).format("YYYY-MM-DD");
     return {
       ...markedDatesObj,
@@ -41,19 +41,18 @@ const CalendarComponent = ({username}:any) => {
   }, {});
 
   const selectedItems = dbData
-  .map((item:any) => {
-    const date = moment(item.tanggal).format("YYYY-MM-DD");
-    const startTime = moment(item.waktu_awal).format("HH:mm");
-    const endTime = moment(item.waktu_akhir).format("HH:mm");
+    .map((item: any) => {
+      const date = moment(item.tanggal).format("YYYY-MM-DD");
+      const startTime = moment(item.waktu_awal).format("HH:mm");
+      const endTime = moment(item.waktu_akhir).format("HH:mm");
 
-    return { ...item, date, startTime, endTime };
-  })
-  .filter((item:any) => item.date === selected);
+      return { ...item, date, startTime, endTime };
+    })
+    .filter((item: any) => item.date === selected);
 
-  
   const renderItem = ({ item }: any) => {
     const createdAt = moment(item?.date).format("MMM Do YYYY");
-    console.log(item, 'check item')
+    console.log(item, "check item");
     return (
       <Div
         bg="#fff"
@@ -67,16 +66,16 @@ const CalendarComponent = ({username}:any) => {
       >
         <Text>Created at: {createdAt}</Text>
         <Text>Note: {item.note}</Text>
-        <Text>Start: {moment(item?.waktu_awal).format('LT')}</Text>
-        <Text>End: {moment(item?.waktu_akhir).format('LT')}</Text>
+        <Text>Start: {moment(item?.waktu_awal).format("LT")}</Text>
+        <Text>End: {moment(item?.waktu_akhir).format("LT")}</Text>
       </Div>
     );
   };
-    
+
   return (
     <Div flex={1} bg="#fff">
       <Calendar
-        current={new Date()}                
+        current={new Date()}
         // Callback that gets called when the user selects a day
         onDayPress={(day) => {
           setSelected(day.dateString);

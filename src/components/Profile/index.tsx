@@ -16,23 +16,17 @@ import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const EditProfile = () => {
-  const nav = useNavigation<any>()
+  const nav = useNavigation<any>();
   const route = useRoute<any>();
   const params = route?.params;
-  const [email, setEmail] = useState(params?.email)
-  const [password, setPassword] = useState(params?.password)
+  const [email, setEmail] = useState(params?.email);
+  const [password, setPassword] = useState(params?.password);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
-  console.log(params, "console dalam edit profile");  
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());  
-  const updateProfile = async (
-    email,
-    selectedDate,
-  ) => {
+  console.log(params, "console dalam edit profile");
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const updateProfile = async (email, selectedDate) => {
     try {
-      if (
-        !email ||        
-        !selectedDate         
-      ) {
+      if (!email || !selectedDate) {
         Toast.show({
           type: "error",
           text1: "Error",
@@ -43,24 +37,23 @@ const EditProfile = () => {
 
       const response = await axios
         .post("https://reminderapss.rianricardo.me/editprofile", {
-          username: params?.name,   
-          email: email,       
+          username: params?.name,
+          email: email,
           password: password,
           gender: params?.gender,
-          dob: moment(selectedDate).format(),          
+          dob: moment(selectedDate).format(),
         })
-        .then((res) => {                    
-            if (res?.data?.Respone != 0) {
-              Toast.show({
-                type: "success",
-                text1: `Profile have been updated`,
-              });
-              nav.navigate("Settings")
-            } else{
-
+        .then((res) => {
+          if (res?.data?.Respone != 0) {
             Toast.show({
-              type: 'error',
-              text1: 'Error',
+              type: "success",
+              text1: `Profile have been updated`,
+            });
+            nav.navigate("Settings");
+          } else {
+            Toast.show({
+              type: "error",
+              text1: "Error",
             });
           }
         });
@@ -100,8 +93,12 @@ const EditProfile = () => {
           onChangeDate={setSelectedDate}
         >
           <PickerButtonDesign
-            title="Date Of Birth"            
-            value={params?.dob ? formatDate(selectedDate) : moment(params?.dob).format('YYYY-MM-DD') }
+            title="Date Of Birth"
+            value={
+              params?.dob
+                ? formatDate(selectedDate)
+                : moment(params?.dob).format("YYYY-MM-DD")
+            }
           />
         </HeadlessDatePicker>
       </Div>
@@ -128,28 +125,28 @@ const EditProfile = () => {
       <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Password:
-        </Text>       
+        </Text>
         <Input
-              mt={heightPercentageToDP(1)}
-              placeholder="Password here...."
-              value={password}
-              onChangeText={(val) => setPassword(val)}
-              // w={widthPercentageToDP(87)}
-              secureTextEntry={!isPasswordVisible}
-              suffix={
-                <TouchableOpacity
-                  style={{ right: 5 }}
-                  onPress={() => setPasswordVisible(!isPasswordVisible)}
-                >
-                  <Icon
-                    name={isPasswordVisible ? "eye" : "eye-with-line"}
-                    fontSize={16}
-                    color="black"
-                    fontFamily="Entypo"
-                  />
-                </TouchableOpacity>
-              }
-            />
+          mt={heightPercentageToDP(1)}
+          placeholder="Password here...."
+          value={password}
+          onChangeText={(val) => setPassword(val)}
+          // w={widthPercentageToDP(87)}
+          secureTextEntry={!isPasswordVisible}
+          suffix={
+            <TouchableOpacity
+              style={{ right: 5 }}
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+            >
+              <Icon
+                name={isPasswordVisible ? "eye" : "eye-with-line"}
+                fontSize={16}
+                color="black"
+                fontFamily="Entypo"
+              />
+            </TouchableOpacity>
+          }
+        />
       </Div>
 
       <Div p={10} row>
@@ -180,7 +177,7 @@ const EditProfile = () => {
         bg="#000"
         color="#fff"
         fontWeight="bold"
-        onPress={() => updateProfile(email,password) }
+        onPress={() => updateProfile(email, password)}
       >
         Simpan
       </Button>

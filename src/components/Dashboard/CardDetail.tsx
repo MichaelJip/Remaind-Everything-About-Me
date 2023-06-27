@@ -15,11 +15,11 @@ import Toast from "react-native-toast-message";
 import axios from "axios";
 
 const CardDetail = () => {
-  const route = useRoute<any>()
-  const params = route?.params
+  const route = useRoute<any>();
+  const params = route?.params;
   const nav = useNavigation<any>();
   const [title, setTitle] = useState(params?.title);
-  const [note, setNote] = useState(params?.note);  
+  const [note, setNote] = useState(params?.note);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDateTimeFirst, setSelectedDateTimeFirst] = useState<Date>(
     new Date()
@@ -27,7 +27,7 @@ const CardDetail = () => {
   const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<Date>(
     new Date()
   );
-  
+
   const updateTask = async (
     title,
     note,
@@ -41,7 +41,7 @@ const CardDetail = () => {
         !note ||
         !selectedDate ||
         !selectedDateTimeFirst ||
-        !selectedDateTimeLast 
+        !selectedDateTimeLast
       ) {
         Toast.show({
           type: "error",
@@ -53,26 +53,25 @@ const CardDetail = () => {
 
       const response = await axios
         .post("https://reminderapss.rianricardo.me/updatetask", {
-          judul: title,          
+          judul: title,
           tanggal: moment(selectedDate).format(),
-          waktu_awal:moment(selectedDateTimeFirst).format(),
-          waktu_akhir:moment(selectedDateTimeLast).format(),
+          waktu_awal: moment(selectedDateTimeFirst).format(),
+          waktu_akhir: moment(selectedDateTimeLast).format(),
           note: note,
           aktifiti: "",
-          id_task: params?.id,          
+          id_task: params?.id,
         })
-        .then((res) => {                    
-            if (res?.data?.Respone != 0) {
-              Toast.show({
-                type: "success",
-                text1: `Task have been updated`,
-              });
-              nav.navigate("Home")
-            } else{
-
+        .then((res) => {
+          if (res?.data?.Respone != 0) {
             Toast.show({
-              type: 'error',
-              text1: 'Error',
+              type: "success",
+              text1: `Task have been updated`,
+            });
+            nav.navigate("Home");
+          } else {
+            Toast.show({
+              type: "error",
+              text1: "Error",
             });
           }
         });
@@ -86,26 +85,23 @@ const CardDetail = () => {
     }
   };
 
-  const deleteTask = async (
-  ) => {
-    try {      
-
+  const deleteTask = async () => {
+    try {
       const response = await axios
-        .post("https://reminderapss.rianricardo.me/deletetask", {      
-          id_task: params?.id,          
+        .post("https://reminderapss.rianricardo.me/deletetask", {
+          id_task: params?.id,
         })
-        .then((res) => {                    
-            if (res?.data?.Respone != 0) {
-              Toast.show({
-                type: "success",
-                text1: `Task have been deleted`,
-              });
-              nav.navigate("Home")
-            } else{
-
+        .then((res) => {
+          if (res?.data?.Respone != 0) {
             Toast.show({
-              type: 'error',
-              text1: 'Error',
+              type: "success",
+              text1: `Task have been deleted`,
+            });
+            nav.navigate("Home");
+          } else {
+            Toast.show({
+              type: "error",
+              text1: "Error",
             });
           }
         });
@@ -123,7 +119,7 @@ const CardDetail = () => {
       judul: "OLAHRAGA",
     },
     {
-      judul: "MAKAN",
+      judul: "MAKANAN",
     },
     {
       judul: "TIDUR",
@@ -135,8 +131,7 @@ const CardDetail = () => {
       judul: "BERMAIN",
     },
   ];
-  const showDiv = data.some(item => item.judul === params?.category);
-
+  const showDiv = data.some((item) => item.judul === params?.category);
 
   return (
     <ScrollDiv flex={1} bg="#fff">
@@ -144,7 +139,12 @@ const CardDetail = () => {
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Title:
         </Text>
-        <Input placeholder="Title...." mt={heightPercentageToDP(0.5)} value={title} onChangeText={(val) => setTitle(val)} />
+        <Input
+          placeholder="Title...."
+          mt={heightPercentageToDP(0.5)}
+          value={title}
+          onChangeText={(val) => setTitle(val)}
+        />
       </Div>
 
       <Div p={10}>
@@ -158,7 +158,11 @@ const CardDetail = () => {
           <PickerButtonDesign
             title="Choose Date"
             // value={formatDate(selectedDate)}
-            value={params?.date ? formatDate(selectedDate) : moment(params?.date).format('YYYY-MM-DD') }
+            value={
+              params?.date
+                ? formatDate(selectedDate)
+                : moment(params?.date).format("YYYY-MM-DD")
+            }
           />
         </HeadlessDatePicker>
       </Div>
@@ -169,7 +173,7 @@ const CardDetail = () => {
         </Text>
         <PickerTimerDesign
           selectedDates={selectedDateTimeFirst}
-          onChangeDate={setSelectedDateTimeFirst}          
+          onChangeDate={setSelectedDateTimeFirst}
         />
       </Div>
 
@@ -187,7 +191,12 @@ const CardDetail = () => {
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
           Note:{" "}
         </Text>
-        <Input placeholder="Note...." mt={heightPercentageToDP(0.5)} value={note} onChangeText={(val) => setNote(val)}/>
+        <Input
+          placeholder="Note...."
+          mt={heightPercentageToDP(0.5)}
+          value={note}
+          onChangeText={(val) => setNote(val)}
+        />
       </Div>
 
       {/* <Div p={10}>
@@ -208,27 +217,29 @@ const CardDetail = () => {
           Choose Activity
         </Button>
       </Div> */}
-      
+
       {showDiv && (
-      <Div p={10}>
-        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Activity:
-        </Text>
-        <Button
-          w={widthPercentageToDP(95)}
-          color="#000"
-          borderColor="#000"
-          borderWidth={1}
-          bg="transparent"
-          mt={heightPercentageToDP(1)}
-          onPress={() => nav.navigate("Activity", {
-            kategori: params?.category
-          })}
-        >
-          Choose Activity
-        </Button>
-      </Div>
-    )}
+        <Div p={10}>
+          <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
+            Activity:
+          </Text>
+          <Button
+            w={widthPercentageToDP(95)}
+            color="#000"
+            borderColor="#000"
+            borderWidth={1}
+            bg="transparent"
+            mt={heightPercentageToDP(1)}
+            onPress={() =>
+              nav.navigate("Activity", {
+                kategori: params?.category,
+              })
+            }
+          >
+            Choose Activity
+          </Button>
+        </Div>
+      )}
 
       <Div
         bg="#c4c4c4"
@@ -245,7 +256,15 @@ const CardDetail = () => {
           bg="#f1c40f"
           color="#fff"
           fontWeight="bold"
-          onPress={() => updateTask(title, note, selectedDate, selectedDateTimeFirst, selectedDateTimeLast)}
+          onPress={() =>
+            updateTask(
+              title,
+              note,
+              selectedDate,
+              selectedDateTimeFirst,
+              selectedDateTimeLast
+            )
+          }
         >
           Update
         </Button>

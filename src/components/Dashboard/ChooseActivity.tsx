@@ -12,19 +12,17 @@ import axios from "axios";
 
 const ChooseActivity = () => {
   const nav = useNavigation<any>();
-  const route = useRoute()
-  const params = route?.params
-  console.log(params, 'dalam activity list')
-  const [data, setData] = useState()
-  console.log(data, 'check data dari api')  
+  const route = useRoute();
+  const params = route?.params;
+  // console.log(params, 'dalam activity list')
+  const [data, setData] = useState();
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://reminderapss.rianricardo.me/listaktiviti/${params?.kategori}`
+        `https://reminderapss.rianricardo.me/listaktiviti/${params?.name}`
       );
       const data = response?.data;
-      setData(data)
-      console.log(data, 'dalam respons')
+      setData(data);
     } catch (error) {
       console.log("There is an error:", error);
     }
@@ -34,7 +32,7 @@ const ChooseActivity = () => {
     const interval = setInterval(() => {
       fetchData();
     }, 100); // Fetch data every 10 seconds
-  
+
     return () => {
       clearInterval(interval); // Cleanup the interval on component unmount
     };
@@ -45,9 +43,11 @@ const ChooseActivity = () => {
         activeOpacity={0.8}
         onPress={() =>
           nav.navigate("ActivityDetail", {
-            videoLink: item?.link_vid ,
-            title: item?.judul,
-            desc: item?.ket,            
+            videoLink: item?.link_vid,
+            title: item?.kategori_aktivitas,
+            desc: item?.ket,
+            name: params?.username,
+            aktivitas: item?.judul_aktivitas,
           })
         }
       >
@@ -66,7 +66,7 @@ const ChooseActivity = () => {
             fontWeight="bold"
             fontSize={16}
           >
-            {item?.judul}
+            {item?.judul_aktivitas}
           </Text>
         </Div>
       </TouchableOpacity>

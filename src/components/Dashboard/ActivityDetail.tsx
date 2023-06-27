@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
-import { useRoute } from "@react-navigation/native";
-import { Div, ScrollDiv, Text } from "react-native-magnus";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Button, Div, ScrollDiv, Text } from "react-native-magnus";
 import YoutubePlayer from "react-native-youtube-iframe";
 import {
   heightPercentageToDP,
@@ -8,22 +8,30 @@ import {
 } from "react-native-responsive-screen";
 import WebView from "react-native-webview";
 import { Responsive } from "../../helper/Responsive";
+import { COLOR_PRIMARY } from "../../helper/theme";
 
 const ActivityDetail = () => {
   const props = useRoute<any>();
   const params = props?.params;
+  const nav = useNavigation<any>();
   const [playing, setPlaying] = useState(false);
   const onStateChange = useCallback((state: any) => {
     if (state === "ended") {
       setPlaying(false);
     }
   }, []);
-
+  useEffect(() => {
+    if (params?.videoLink) {
+      setTimeout(() => {
+        setPlaying(true);
+      }, 5000); // Delay of 5 seconds (5000 milliseconds)
+    }
+  }, [params]);
   const togglePlaying = useCallback(() => {
     setPlaying((prev) => !prev);
   }, []);
   return (
-    <Div flex={1}>
+    <ScrollDiv flex={1}>
       <YoutubePlayer
         height={heightPercentageToDP(28)}
         webViewStyle={{ marginLeft: 10, marginTop: 10, marginRight: 10 }}
@@ -38,21 +46,34 @@ const ActivityDetail = () => {
         fontWeight="bold"
         fontSize={16}
       >
-        {params?.title}
+        {params?.aktivitas}
       </Text>
       <Text ml={widthPercentageToDP(4)}>Description: </Text>
-      <Text ml={widthPercentageToDP(4)} fontSize={Responsive(16)} fontWeight="500">
+      <Text
+        ml={widthPercentageToDP(4)}
+        fontSize={Responsive(16)}
+        fontWeight="500"
+      >
         {params?.desc}
       </Text>
-      {/* <WebView
-        source={{ uri: params?.website }}
-        style={{
-          height: heightPercentageToDP(60),
-          marginLeft: widthPercentageToDP(4),
-          marginRight: widthPercentageToDP(4),
-        }}
-      /> */}
-    </Div>
+      <Button
+        bg={COLOR_PRIMARY}
+        onPress={() =>
+          nav.navigate("Task", {
+            aktivitas: params?.aktivitas,
+            kategori: params?.title,
+            username: params?.name,
+          })
+        }
+        mt={heightPercentageToDP(1)}
+        justifyContent="center"
+        alignSelf="center"
+        mb={heightPercentageToDP(1)}
+      >
+        Add Task
+      </Button>      
+      <Div h={heightPercentageToDP(20)} />
+    </ScrollDiv>
   );
 };
 

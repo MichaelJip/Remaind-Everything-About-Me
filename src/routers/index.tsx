@@ -121,7 +121,7 @@ const MyBot = ({ route }: any) => {
         }}
       />
       <Tab.Screen
-        name="Calendar"        
+        name="Calendar"
         options={{
           title: "Calendar",
           headerTitleAlign: "center",
