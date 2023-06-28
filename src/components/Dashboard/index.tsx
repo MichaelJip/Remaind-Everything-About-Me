@@ -139,25 +139,17 @@ const Dashboard = ({ username }: any) => {
     const currentTime = new Date();
     const checkMoment = moment(currentTime).format();
 
-    // console.log("Current time:", checkMoment);
-
     dbData?.forEach((task: any) => {                
       const { id_task, waktu_akhir } = task;        
       const endTime = moment(waktu_akhir).format();
 
-      // console.log("Task ID:", id_task);
-      // console.log("End time:", endTime);
-
       setStatusMap((prevStatusMap: any) => {
         const updatedStatusMap = {
           ...prevStatusMap,
-          [id_task]: checkMoment >= endTime ? 1 : 0
+          [id_task]: checkMoment >= endTime ? id_task : null
         };
-
-        // console.log("Updated status map:", updatedStatusMap);
-
-        // Call updateStatus if the status changes to 1
-        if (prevStatusMap[id_task] !== updatedStatusMap[id_task] && updatedStatusMap[id_task] === 1) {
+      
+        if (prevStatusMap[id_task] !== updatedStatusMap[id_task] && updatedStatusMap[id_task]) {
           updateStatus(id_task);
         }                
         return updatedStatusMap;
