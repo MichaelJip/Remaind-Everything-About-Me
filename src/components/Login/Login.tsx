@@ -50,12 +50,30 @@ const Login = () => {
             //   },
             // });
 
-            nav.replace("Dashboard", {
-              screen: "MyBot",
-              params: {
-                username: name,
-              },
-            });
+            nav.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'Dashboard',
+                    params: {
+                      screen: 'MyBot',
+                      params: {
+                        username: name,
+                      },
+                    },
+                  },
+                ],
+              })
+            );
+            
+            // nav.replace("Dashboard", {
+            //   screen: "MyBot",
+            //   params: {
+            //     username: name,
+            //   },
+            // });
+            
           } else {
             Toast.show({
               type: "error",

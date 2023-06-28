@@ -31,6 +31,7 @@ const Task = () => {
   const nav = useNavigation<any>();
   const route = useRoute<any>();
   const params = route?.params;
+  console.log(params, 'check params')
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -76,9 +77,9 @@ const Task = () => {
           waktu_awal: moment(selectedDateTimeFirst).format(),
           waktu_akhir: moment(selectedDateTimeLast).format(),
           note: note,
-          aktifiti: params?.aktivitas,
+          aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
           username: params?.username,
-          kategori: params?.kategori,
+          kategori: !params?.kategori ? params?.name : params?.kategori,
         })
         .then((res) => {
           if (res?.data?.Respone != 0) {

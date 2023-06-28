@@ -15,9 +15,8 @@ import axios from "axios";
 
 const AddCategory = () => {
   const nav = useNavigation<any>();
-  const route = useRoute();
-  const params = route?.params;
-  console.log(params);
+  const route = useRoute<any>();
+  const params = route?.params;  
   const [visible, setVisible] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState<any>([]);
@@ -87,13 +86,24 @@ const AddCategory = () => {
 
   const cardList = ({ item, index }: any) => {
     return (
-      <Pressable
-        onPress={() =>
-          nav.navigate("Activity", {
-            name: item?.judul,
-            username: params?.username,
-          })
-        }
+      <Pressable       
+        onPress={() => {
+          const foundCategory = data.find(category => category.judul === item?.judul);
+          console.warn(foundCategory)
+          if (foundCategory) {
+            // Data is the same, navigate to "Task" screen
+            nav.navigate("Activity", {
+              name: item?.judul,
+              username: params?.username,
+            });
+          } else {
+            // Data is different, navigate to "Activity" screen            
+            nav.navigate("Task", {
+              name: item?.judul,
+              username: params?.username,
+            });
+          }
+        }}
       >
         <Div
           row

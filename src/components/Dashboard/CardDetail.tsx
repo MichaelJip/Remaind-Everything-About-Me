@@ -27,7 +27,7 @@ const CardDetail = () => {
   const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<Date>(
     new Date()
   );
-
+    console.log(params,'check')
   const updateTask = async (
     title,
     note,
@@ -231,7 +231,7 @@ const CardDetail = () => {
             bg="transparent"
             mt={heightPercentageToDP(1)}
             onPress={() =>
-              nav.navigate("Activity", {
+              nav.navigate("ActivityUpdate", {
                 kategori: params?.category,
               })
             }

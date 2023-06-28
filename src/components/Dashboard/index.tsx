@@ -78,12 +78,8 @@ const Dashboard = ({ username }: any) => {
   const updateStatus = async (id_task: any) => {
   // console.log("Updating status for id_task:", id_task);
 
-  try {      
-    const status = statusMap[id_task];
-    console.log("Sending update request with status:", status);
-
-    const response = await axios.post("https://reminderapss.rianricardo.me/updatetaskdone", {
-      status: 1,
+  try {        
+    const response = await axios.post("https://reminderapss.rianricardo.me/updatetaskdone", {      
       id_task: id_task
     });
 

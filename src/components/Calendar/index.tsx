@@ -1,13 +1,15 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Div } from "react-native-magnus";
 import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import axios from "axios";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const CalendarComponent = ({ username }: any) => {
   const name = username;
   const realName = name?.params?.params?.username;
+  const nav = useNavigation<any>()
   const [selected, setSelected] = useState<any>("");
   const [dbData, setData] = useState<any>([]);
   const fetchData = async () => {
@@ -54,21 +56,32 @@ const CalendarComponent = ({ username }: any) => {
     const createdAt = moment(item?.date).format("MMM Do YYYY");
     console.log(item, "check item");
     return (
-      <Div
-        bg="#fff"
-        py={10}
-        px={10}
-        m={10}
-        rounded={8}
-        style={{ elevation: 3 }}
-        borderColor="#000"
-        borderWidth={1}
-      >
-        <Text>Created at: {createdAt}</Text>
-        <Text>Note: {item.note}</Text>
-        <Text>Start: {moment(item?.waktu_awal).format("LT")}</Text>
-        <Text>End: {moment(item?.waktu_akhir).format("LT")}</Text>
-      </Div>
+      <Pressable onPress={() => nav.navigate("TaskDetail", {
+        name: item?.username,
+        id: item?.id_task,
+        title: item?.judul,
+        note: item?.note,
+        category: item?.kategori,
+        start: item?.waktu_awal,
+        end: item?.waktu_akhir,
+        date: item?.tanggal
+      })}>
+        <Div
+          bg="#fff"
+          py={10}
+          px={10}
+          m={10}
+          rounded={8}
+          style={{ elevation: 3 }}
+          borderColor="#000"
+          borderWidth={1}
+        >
+          <Text>Created at: {createdAt}</Text>
+          <Text>Note: {item.note}</Text>
+          <Text>Start: {moment(item?.waktu_awal).format("LT")}</Text>
+          <Text>End: {moment(item?.waktu_akhir).format("LT")}</Text>
+        </Div>
+      </Pressable>
     );
   };
 

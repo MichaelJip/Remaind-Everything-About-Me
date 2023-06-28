@@ -24,6 +24,7 @@ const Settings = ({ username }: any) => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const nav = useNavigation<any>();
+  const [data, setData] = useState()
   const [isModalVisible, setModalVisible] = useState(false);
   const fetchData = async () => {
     try {
@@ -41,26 +42,40 @@ const Settings = ({ username }: any) => {
     }
   };
 
+  const fetchSummary = async () => {
+    try {
+      const response = await axios.get(
+        `https://reminderapss.rianricardo.me/filterday/${name}`
+      );
+      const data = response?.data;
+      setData(data)
+    } catch (error) {
+      console.log("There is an error:", error);
+    }
+  };  
+
   useEffect(() => {
     fetchData();
+    fetchSummary()
   }, []);
-  const data = [
-    {
-      title: "Family Vacation",
-      category: "Lainnya",
-      desc: "A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.",
-    },
-    {
-      title: "Family Vacation",
-      category: "Lainnya",
-      desc: "A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.",
-    },
-    {
-      title: "Family Vacation",
-      category: "Lainnya",
-      desc: "A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.",
-    },
-  ];
+  console.log(data, 'check summary')
+  // const data = [
+  //   {
+  //     title: "Family Vacation",
+  //     category: "Lainnya",
+  //     desc: "A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.",
+  //   },
+  //   {
+  //     title: "Family Vacation",
+  //     category: "Lainnya",
+  //     desc: "A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.",
+  //   },
+  //   {
+  //     title: "Family Vacation",
+  //     category: "Lainnya",
+  //     desc: "A collection of photos from your recent family vacation to the beach. It includes snapshots of your kids building sandcastles, playing in the waves, and enjoying ice cream by the shore.",
+  //   },
+  // ];
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -70,15 +85,15 @@ const Settings = ({ username }: any) => {
     return (
       <Div p={10}>
         <Text fontSize={Responsive(20)} fontWeight="500" color="#000">
-          {item?.title}
+          {item?.judul}
         </Text>
-        <Text fontSize={Responsive(18)}>{item?.category}</Text>
+        <Text fontSize={Responsive(16)}>{item?.kategori}</Text>        
         <Text
           w={widthPercentageToDP(80)}
           fontSize={Responsive(12)}
           color="#000"
         >
-          {item?.desc}
+          {item?.note}
         </Text>
       </Div>
     );

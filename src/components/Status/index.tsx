@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Div, Image, Text } from "react-native-magnus";
 import {
   heightPercentageToDP,
@@ -8,13 +8,43 @@ import { Responsive } from "../../helper/Responsive";
 import { COLOR_PRIMARY } from "../../helper/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Progress from "react-native-progress";
+import axios from "axios";
 
-const Status = () => {
-  const [selectedButton, setSelectedButton] = useState(null);
-
+const Status = ({username}:any) => {
+  const name = username?.params?.params?.username
+  const [selectedButton, setSelectedButton] = useState('statusday');
+  const [data, setData] = useState()
   const handleButtonPress = (buttonName: any) => {
     setSelectedButton(buttonName);
   };
+
+  console.log(name)
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `https://reminderapss.rianricardo.me/${selectedButton}/${name}`
+      );
+      const data = response?.data;
+      setData(data)
+    } catch (error) {
+      console.log("There is an error:", error);
+    }
+  };  
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData();
+    }, 1000); // Fetch data every 10 seconds
+  
+    return () => {
+      clearInterval(interval); // Cleanup the interval on component unmount
+    };
+  }, [selectedButton]);
+
+  console.log(data, 'check data status')
+
+
   return (
     <Div bg="#fff" flex={1}>
       <Div
@@ -26,25 +56,25 @@ const Status = () => {
       >
         <Button
           w={widthPercentageToDP(25)}
-          bg={selectedButton === "Daily" ? COLOR_PRIMARY : COLOR_PRIMARY}
-          opacity={selectedButton !== "Daily" ? 0.5 : 1}
-          onPress={() => handleButtonPress("Daily")}
+          bg={selectedButton === "statusday" ? COLOR_PRIMARY : COLOR_PRIMARY}
+          opacity={selectedButton !== "statusday" ? 0.5 : 1}
+          onPress={() => handleButtonPress("statusday")}
         >
           Daily
         </Button>
         <Button
           w={widthPercentageToDP(25)}
-          bg={selectedButton === "Weekly" ? COLOR_PRIMARY : COLOR_PRIMARY}
-          opacity={selectedButton !== "Weekly" ? 0.5 : 1}
-          onPress={() => handleButtonPress("Weekly")}
+          bg={selectedButton === "statusweek" ? COLOR_PRIMARY : COLOR_PRIMARY}
+          opacity={selectedButton !== "statusweek" ? 0.5 : 1}
+          onPress={() => handleButtonPress("statusweek")}
         >
           Weekly
         </Button>
         <Button
           w={widthPercentageToDP(25)}
-          bg={selectedButton === "Monthly" ? COLOR_PRIMARY : COLOR_PRIMARY}
-          opacity={selectedButton !== "Monthly" ? 0.5 : 1}
-          onPress={() => handleButtonPress("Monthly")}
+          bg={selectedButton === "statusmonth" ? COLOR_PRIMARY : COLOR_PRIMARY}
+          opacity={selectedButton !== "statusmonth" ? 0.5 : 1}
+          onPress={() => handleButtonPress("statusmonth")}
         >
           Monthly
         </Button>
@@ -74,25 +104,14 @@ const Status = () => {
         >
           Sleep Analysis
         </Text>
-        <Div row mt={heightPercentageToDP(1)} mb={heightPercentageToDP(2)}>
-          <Div>
-            <Progress.Circle
-              progress={0.4}
-              size={70}
-              style={{
-                marginTop: heightPercentageToDP(2.5),
-                marginLeft: widthPercentageToDP(10),
-                marginRight: widthPercentageToDP(5),
-              }}
-            />
-          </Div>
+        <Div row mt={heightPercentageToDP(1)} mb={heightPercentageToDP(2)} justifyContent="center">          
           <Div mt={heightPercentageToDP(4)} ml={widthPercentageToDP(10)}>
             <Text
               fontSize={Responsive(20)}
               fontWeight="bold"
               textAlign="center"
             >
-              7h 30m
+              {!data ? '-' : data[0]?.waktu_tidur === null ? '0' : data[0]?.waktu_tidur}
             </Text>
             <Text>Sleep Duration</Text>
           </Div>
@@ -127,7 +146,7 @@ const Status = () => {
             textAlign="center"
             mt={heightPercentageToDP(1)}
           >
-            Lainnya
+            Bermain
           </Text>
           <Div row>
             <Text
@@ -136,7 +155,7 @@ const Status = () => {
               fontWeight="bold"
               ml={widthPercentageToDP(5)}
             >
-              1 of 4
+              {!data ? '-' : data[0]?.bermain === null ? '0' : data[0]?.bermain}
             </Text>
             <Image
               source={require("../../assets/lain.png")}
@@ -178,7 +197,7 @@ const Status = () => {
                 fontWeight="bold"
                 ml={widthPercentageToDP(5)}
               >
-                1698 Kcal
+                {!data ? '-' : data[0]?.olahraga === null ? '0' : data[0]?.olahraga} Kcal
               </Text>
               <Image
                 source={require("../../assets/or.png")}
@@ -225,7 +244,7 @@ const Status = () => {
               fontWeight="bold"
               ml={widthPercentageToDP(5)}
             >
-              350 Kcal
+              {!data ? '-' : data[0]?.makanan === null ? '0' : data[0]?.makanan} Kcal
             </Text>
             <Image
               source={require("../../assets/makan.png")}
@@ -234,6 +253,50 @@ const Status = () => {
               resizeMode="contain"
               alignSelf="flex-end"
             />
+          </Div>
+        </LinearGradient>
+
+        <LinearGradient
+          colors={["#74B9FF", "#31BAC2"]}
+          locations={[0.2, 0.8]}
+          start={{ x: 0, y: 0.7 }}
+          end={{ x: 0.1, y: 1.1 }}
+          style={{
+            marginTop: heightPercentageToDP(1),
+            backgroundColor: COLOR_PRIMARY,
+            borderRadius: 8,
+            height: heightPercentageToDP(17),
+            width: widthPercentageToDP(38),
+          }}
+        >
+          <Text
+            fontSize={Responsive(20)}
+            fontWeight="500"
+            textAlign="center"
+            mt={heightPercentageToDP(1)}
+          >
+            Minum
+          </Text>
+          <Div justifyContent="center" alignSelf="center">
+            <Div row>
+              <Text
+                fontSize={Responsive(16)}
+                w={widthPercentageToDP(8)}
+                fontWeight="bold"
+                ml={widthPercentageToDP(5)}
+              >
+                {!data ? '-' : data[0]?.minum === null ? '0' : data[0]?.minum}
+              </Text>
+              <Image
+                source={require("../../assets/drink.png")}
+                h={heightPercentageToDP(12)}
+                w={widthPercentageToDP(18)}
+                ml={widthPercentageToDP(1)}
+                mr={widthPercentageToDP(2)}
+                resizeMode="contain"
+                alignSelf="flex-end"
+              />
+            </Div>
           </Div>
         </LinearGradient>
       </Div>

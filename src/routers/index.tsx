@@ -20,6 +20,8 @@ import CardDetail from "../components/Dashboard/CardDetail";
 import EditProfile from "../components/Profile";
 import ChooseActivity from "../components/Dashboard/ChooseActivity";
 import ActivityDetail from "../components/Dashboard/ActivityDetail";
+import ChooseActivityUpdate from "../components/Dashboard/update/ChooseActivity";
+import ActivityDetailUpdate from "../components/Dashboard/update/ActivityDetail";
 
 const EntryStack = createStackNavigator();
 
@@ -104,8 +106,7 @@ const MyBot = ({ route }: any) => {
         {() => <Home params={route} />}
       </Tab.Screen>
       <Tab.Screen
-        name="Status"
-        component={Status}
+        name="Status"        
         options={{
           tabBarLabel: "",
           title: "Status",
@@ -119,7 +120,9 @@ const MyBot = ({ route }: any) => {
             />
           ),
         }}
-      />
+      >
+         {() => <Status username={route} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Calendar"
         options={{
@@ -210,6 +213,20 @@ const Home = ({ params }: any) => (
     <MainDash.Screen
       name="ActivityDetail"
       component={ActivityDetail}
+      options={{
+        title: "Activity Detail",
+      }}
+    />
+    <MainDash.Screen
+      name="ActivityUpdate"
+      component={ChooseActivityUpdate}
+      options={{
+        title: "Activity",
+      }}
+    />
+    <MainDash.Screen
+      name="ActivityDetailUpdate"
+      component={ActivityDetailUpdate}
       options={{
         title: "Activity Detail",
       }}
