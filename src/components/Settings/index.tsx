@@ -195,7 +195,7 @@ const Settings = ({ username }: any) => {
               />
             </Pressable>
             <Text p={10} fontSize={Responsive(18)}>
-              Hi, Michael!
+              Hi, {name}!
             </Text>
             <Text p={10} fontSize={Responsive(16)} color="#000">
               Here's a summary of your latest uploads:
