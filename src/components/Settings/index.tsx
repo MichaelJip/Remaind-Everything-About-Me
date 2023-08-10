@@ -45,7 +45,7 @@ const Settings = ({ username }: any) => {
   const fetchSummary = async () => {
     try {
       const response = await axios.get(
-        `https://reminderapss.rianricardo.me/filterday/${name}`
+        `https://reminderapss.rianricardo.me/filtermonth/${name}`
       );
       const data = response?.data;
       setData(data)
