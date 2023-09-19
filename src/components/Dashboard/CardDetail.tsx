@@ -20,14 +20,14 @@ const CardDetail = () => {
   const nav = useNavigation<any>();
   const [title, setTitle] = useState(params?.title);
   const [note, setNote] = useState(params?.note);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedDateTimeFirst, setSelectedDateTimeFirst] = useState<Date>(
+  const [selectedDate, setSelectedDate] = useState<any>(new Date());
+  const [selectedDateTimeFirst, setSelectedDateTimeFirst] = useState<any>(
     new Date()
   );
-  const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<Date>(
+  const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<any>(
     new Date()
   );
-    console.log(params,'check')
+  console.log(params, "check");
   const updateTask = async (
     title,
     note,
@@ -58,7 +58,7 @@ const CardDetail = () => {
           waktu_awal: moment(selectedDateTimeFirst).format(),
           waktu_akhir: moment(selectedDateTimeLast).format(),
           note: note,
-          aktifiti: "",
+          aktifiti: params.category ? params.category : "",
           id_task: params?.id,
         })
         .then((res) => {

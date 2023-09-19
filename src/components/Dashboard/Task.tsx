@@ -1,24 +1,21 @@
+import { useNavigation, useRoute } from "@react-navigation/native";
+import axios from "axios";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
+import { Platform } from "react-native";
 import { Button, Div, Input, ScrollDiv, Text } from "react-native-magnus";
-import { Responsive } from "../../helper/Responsive";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from "react-native-responsive-screen";
-import DropDownPicker from "react-native-dropdown-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import Toast from "react-native-toast-message";
+import { Responsive } from "../../helper/Responsive";
+import { formatDate } from "../../helper/formatDate";
 import HeadlessDatePicker from "../DatePicker/HeadlessDatePicker";
 import PickerButtonDesign from "../DatePicker/PickerButtonDesign";
-import { formatDate } from "../../helper/formatDate";
 import PickerTimerDesign from "../DatePicker/PickerTimerDesign";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
-import axios from "axios";
-import moment from "moment";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
-import { Platform } from "react-native";
-import { COLOR_PRIMARY } from "../../helper/theme";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -72,172 +69,172 @@ const Task = () => {
         return;
       }
 
-      if (repeatValue === null) {
-        // Handle single task creation
-        await axios
-          .post("https://reminderapss.rianricardo.me/task", {
-            judul: title,
-            tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
-            waktu_awal: moment(selectedDateTimeFirst).format(),
-            waktu_akhir: moment(selectedDateTimeLast).format(),
-            note: note,
-            aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
-            username: params?.username,
-            kategori: !params?.kategori ? params?.name : params?.kategori,
-          })
-          .then((res) => {
-            if (res?.data?.Respone != 0) {
-              Toast.show({
-                type: "success",
-                text1: `Task have been created`,
-              });
+      // if (repeatValue === null) {
+      //   // Handle single task creation
+      //   await axios
+      //     .post("https://reminderapss.rianricardo.me/task", {
+      //       judul: title,
+      //       tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+      //       waktu_awal: moment(selectedDateTimeFirst).format(),
+      //       waktu_akhir: moment(selectedDateTimeLast).format(),
+      //       note: note,
+      //       aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
+      //       username: params?.username,
+      //       kategori: !params?.kategori ? params?.name : params?.kategori,
+      //     })
+      //     .then((res) => {
+      //       if (res?.data?.Respone != 0) {
+      //         Toast.show({
+      //           type: "success",
+      //           text1: `Task have been created`,
+      //         });
 
-              const notificationDateFirst = moment(selectedDate)
-                .hour(selectedDateTimeFirst.getHours())
-                .minute(selectedDateTimeFirst.getMinutes())
-                .toDate();
+      //         const notificationDateFirst = moment(selectedDate)
+      //           .hour(selectedDateTimeFirst.getHours())
+      //           .minute(selectedDateTimeFirst.getMinutes())
+      //           .toDate();
 
-              const notificationDateLast = moment(selectedDate)
-                .hour(selectedDateTimeLast.getHours())
-                .minute(selectedDateTimeLast.getMinutes())
-                .toDate();
+      //         const notificationDateLast = moment(selectedDate)
+      //           .hour(selectedDateTimeLast.getHours())
+      //           .minute(selectedDateTimeLast.getMinutes())
+      //           .toDate();
 
-              // Schedule push notifications for task reminders
-              schedulePushNotification({
-                titles: `Mulai ${title}`,
-                bodys: note,
-                dates: notificationDateFirst,
-              });
+      //         // Schedule push notifications for task reminders
+      //         schedulePushNotification({
+      //           titles: `Mulai ${title}`,
+      //           bodys: note,
+      //           dates: notificationDateFirst,
+      //         });
 
-              schedulePushNotification({
-                titles: `Selesai ${title}`,
-                bodys: note,
-                dates: notificationDateLast,
-              });
+      //         schedulePushNotification({
+      //           titles: `Selesai ${title}`,
+      //           bodys: note,
+      //           dates: notificationDateLast,
+      //         });
 
-              nav.navigate("Home");
-            } else {
-              Toast.show({
-                type: "error",
-                text1: "Error",
-              });
-            }
-          });
+      //         nav.navigate("Home");
+      //       } else {
+      //         Toast.show({
+      //           type: "error",
+      //           text1: "Error",
+      //         });
+      //       }
+      //     });
 
-        // Schedule push notifications and other logic as before
-      } else {
-        for (let i = 0; i < repeatValue; i++) {
-          // Calculate the adjusted start and finish times for each repetition
-          const adjustedStartTime = moment(selectedDateTimeFirst)
-            .add(i, "hours") // Increment by 1 hour for each repetition
-            .format();
+      //   // Schedule push notifications and other logic as before
+      // } else {
+      //   for (let i = 0; i < repeatValue; i++) {
+      //     // Calculate the adjusted start and finish times for each repetition
+      //     const adjustedStartTime = moment(selectedDateTimeFirst)
+      //       .add(i, "hours") // Increment by 1 hour for each repetition
+      //       .format();
 
-          const adjustedFinishTime = moment(selectedDateTimeLast)
-            .add(i, "hours") // Increment by 1 hour for each repetition
-            .format();
+      //     const adjustedFinishTime = moment(selectedDateTimeLast)
+      //       .add(i, "hours") // Increment by 1 hour for each repetition
+      //       .format();
 
-          // Use the adjusted times to create tasks for each repetition
-          await axios
-            .post("https://reminderapss.rianricardo.me/task", {
-              judul: title,
-              tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
-              waktu_awal: adjustedStartTime,
-              waktu_akhir: adjustedFinishTime,
-              note: note,
-              aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
-              username: params?.username,
-              kategori: !params?.kategori ? params?.name : params?.kategori,
-            })
-            .then((res) => {
-              if (res?.data?.Respone != 0) {
-                Toast.show({
-                  type: "success",
-                  text1: `Task have been created`,
-                });
+      //     // Use the adjusted times to create tasks for each repetition
+      //     await axios
+      //       .post("https://reminderapss.rianricardo.me/task", {
+      //         judul: title,
+      //         tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+      //         waktu_awal: adjustedStartTime,
+      //         waktu_akhir: adjustedFinishTime,
+      //         note: note,
+      //         aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
+      //         username: params?.username,
+      //         kategori: !params?.kategori ? params?.name : params?.kategori,
+      //       })
+      //       .then((res) => {
+      //         if (res?.data?.Respone != 0) {
+      //           Toast.show({
+      //             type: "success",
+      //             text1: `Task have been created`,
+      //           });
 
-                const notificationDateFirst = moment(selectedDate)
-                  .hour(selectedDateTimeFirst.getHours())
-                  .minute(selectedDateTimeFirst.getMinutes())
-                  .toDate();
+      //           const notificationDateFirst = moment(selectedDate)
+      //             .hour(selectedDateTimeFirst.getHours())
+      //             .minute(selectedDateTimeFirst.getMinutes())
+      //             .toDate();
 
-                const notificationDateLast = moment(selectedDate)
-                  .hour(selectedDateTimeLast.getHours())
-                  .minute(selectedDateTimeLast.getMinutes())
-                  .toDate();
+      //           const notificationDateLast = moment(selectedDate)
+      //             .hour(selectedDateTimeLast.getHours())
+      //             .minute(selectedDateTimeLast.getMinutes())
+      //             .toDate();
 
-                // Schedule push notifications for task reminders
-                schedulePushNotification({
-                  titles: `Mulai ${title}`,
-                  bodys: note,
-                  dates: notificationDateFirst,
-                });
+      //           // Schedule push notifications for task reminders
+      //           schedulePushNotification({
+      //             titles: `Mulai ${title}`,
+      //             bodys: note,
+      //             dates: notificationDateFirst,
+      //           });
 
-                schedulePushNotification({
-                  titles: `Selesai ${title}`,
-                  bodys: note,
-                  dates: notificationDateLast,
-                });
+      //           schedulePushNotification({
+      //             titles: `Selesai ${title}`,
+      //             bodys: note,
+      //             dates: notificationDateLast,
+      //           });
 
-                nav.navigate("Home");
-              } else {
-                Toast.show({
-                  type: "error",
-                  text1: "Error",
-                });
-              }
+      //           nav.navigate("Home");
+      //         } else {
+      //           Toast.show({
+      //             type: "error",
+      //             text1: "Error",
+      //           });
+      //         }
+      //       });
+      //   }
+      // }
+
+      const response = await axios
+        .post("https://reminderapss.rianricardo.me/task", {
+          judul: title,
+          tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+          waktu_awal: moment(selectedDateTimeFirst).format(),
+          waktu_akhir: moment(selectedDateTimeLast).format(),
+          note: note,
+          aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
+          username: params?.username,
+          kategori: !params?.kategori ? params?.name : params?.kategori,
+        })
+        .then((res) => {
+          if (res?.data?.Respone != 0) {
+            Toast.show({
+              type: "success",
+              text1: `Task have been created`,
             });
-        }
-      }
 
-      // const response = await axios
-      //   .post("https://reminderapss.rianricardo.me/task", {
-      //     judul: title,
-      //     tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
-      //     waktu_awal: moment(selectedDateTimeFirst).format(),
-      //     waktu_akhir: moment(selectedDateTimeLast).format(),
-      //     note: note,
-      //     aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
-      //     username: params?.username,
-      //     kategori: !params?.kategori ? params?.name : params?.kategori,
-      //   })
-      //   .then((res) => {
-      //     if (res?.data?.Respone != 0) {
-      //       Toast.show({
-      //         type: "success",
-      //         text1: `Task have been created`,
-      //       });
+            const notificationDateFirst = moment(selectedDate)
+              .hour(selectedDateTimeFirst.getHours())
+              .minute(selectedDateTimeFirst.getMinutes())
+              .toDate();
 
-      //       const notificationDateFirst = moment(selectedDate)
-      //         .hour(selectedDateTimeFirst.getHours())
-      //         .minute(selectedDateTimeFirst.getMinutes())
-      //         .toDate();
+            const notificationDateLast = moment(selectedDate)
+              .hour(selectedDateTimeLast.getHours())
+              .minute(selectedDateTimeLast.getMinutes())
+              .toDate();
 
-      //       const notificationDateLast = moment(selectedDate)
-      //         .hour(selectedDateTimeLast.getHours())
-      //         .minute(selectedDateTimeLast.getMinutes())
-      //         .toDate();
+            // Schedule push notifications for task reminders
+            schedulePushNotification({
+              titles: `Mulai ${title}`,
+              bodys: note,
+              dates: notificationDateFirst,
+            });
 
-      //       // Schedule push notifications for task reminders
-      //       schedulePushNotification({
-      //         titles: `Mulai ${title}`,
-      //         bodys: note,
-      //         dates: notificationDateFirst,
-      //       });
+            schedulePushNotification({
+              titles: `Selesai ${title}`,
+              bodys: note,
+              dates: notificationDateLast,
+            });
 
-      //       schedulePushNotification({
-      //         titles: `Selesai ${title}`,
-      //         bodys: note,
-      //         dates: notificationDateLast,
-      //       });
-
-      //       nav.navigate("Home");
-      //     } else {
-      //       Toast.show({
-      //         type: "error",
-      //         text1: "Error",
-      //       });
-      //     }
-      //   });
+            nav.navigate("Home");
+          } else {
+            Toast.show({
+              type: "error",
+              text1: "Error",
+            });
+          }
+        });
     } catch (error) {
       Toast.show({
         type: "error",
@@ -320,7 +317,7 @@ const Task = () => {
         />
       </Div>
 
-      <Div p={10}>
+      {/* <Div p={10}>
         <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
           Repeat: 
         </Text>
@@ -348,7 +345,6 @@ const Task = () => {
           >
             5x
           </Button>
-          {/* Add other repeat buttons here */}
           <Button
             w={"auto"}
             onPress={() => setRepeatValue(null)}
@@ -360,7 +356,7 @@ const Task = () => {
             No Repeat
           </Button>
         </Div>
-      </Div>
+      </Div> */}
 
       <Div p={10}>
         <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
