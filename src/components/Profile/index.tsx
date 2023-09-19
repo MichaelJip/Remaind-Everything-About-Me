@@ -83,7 +83,7 @@ const EditProfile = () => {
 
       <Div p={10}>
         <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          DOB:
+          Date Of Birth:
         </Text>
         {/* <Text ml={widthPercentageToDP(2)} fontSize={Responsive(20)} color="#000" >
           {params?.dob}

@@ -54,7 +54,7 @@ const AddCategory = () => {
 
   const addCategory = () => {
     if (categoryName.trim() !== "") {
-      const newCategory = { judul: categoryName };
+      const newCategory = { judul: categoryName.toUpperCase() };
       const updatedCategories = [...categories, newCategory];
       setCategories(updatedCategories);
       setCategoryName("");

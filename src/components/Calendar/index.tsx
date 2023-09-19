@@ -9,7 +9,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const CalendarComponent = ({ username }: any) => {
   const name = username;
   const realName = name?.params?.params?.username;
-  const nav = useNavigation<any>()
+  const nav = useNavigation<any>();
   const [selected, setSelected] = useState<any>("");
   const [dbData, setData] = useState<any>([]);
   const fetchData = async () => {
@@ -56,16 +56,20 @@ const CalendarComponent = ({ username }: any) => {
     const createdAt = moment(item?.date).format("MMM Do YYYY");
     console.log(item, "check item");
     return (
-      <Pressable onPress={() => nav.navigate("TaskDetail", {
-        name: item?.username,
-        id: item?.id_task,
-        title: item?.judul,
-        note: item?.note,
-        category: item?.kategori,
-        start: item?.waktu_awal,
-        end: item?.waktu_akhir,
-        date: item?.tanggal
-      })}>
+      <Pressable
+        onPress={() =>
+          nav.navigate("TaskDetail", {
+            name: item?.username,
+            id: item?.id_task,
+            title: item?.judul,
+            note: item?.note,
+            category: item?.kategori,
+            start: item?.waktu_awal,
+            end: item?.waktu_akhir,
+            date: item?.tanggal,
+          })
+        }
+      >
         <Div
           bg="#fff"
           py={10}

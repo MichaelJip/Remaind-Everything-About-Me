@@ -146,7 +146,7 @@ const Status = ({username}:any) => {
             textAlign="center"
             mt={heightPercentageToDP(1)}
           >
-            Bermain
+            Play
           </Text>
           <Div row>
             <Text
@@ -187,7 +187,7 @@ const Status = ({username}:any) => {
             textAlign="center"
             mt={heightPercentageToDP(1)}
           >
-            Olahraga
+            Exercise
           </Text>
           <Div justifyContent="center" alignSelf="center">
             <Div row>
@@ -235,7 +235,7 @@ const Status = ({username}:any) => {
             textAlign="center"
             mt={heightPercentageToDP(1)}
           >
-            Makan
+            Eat
           </Text>
           <Div row>
             <Text
@@ -275,7 +275,7 @@ const Status = ({username}:any) => {
             textAlign="center"
             mt={heightPercentageToDP(1)}
           >
-            Minum
+            Drink
           </Text>
           <Div justifyContent="center" alignSelf="center">
             <Div row>

@@ -18,6 +18,7 @@ import moment from "moment";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
+import { COLOR_PRIMARY } from "../../helper/theme";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -31,7 +32,7 @@ const Task = () => {
   const nav = useNavigation<any>();
   const route = useRoute<any>();
   const params = route?.params;
-  console.log(params, 'check params')
+  console.log(params, "check params");
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -41,6 +42,7 @@ const Task = () => {
   const [selectedDateTimeLast, setSelectedDateTimeLast] = useState<Date>(
     new Date()
   );
+  const [repeatValue, setRepeatValue] = useState(null);
 
   //For Notif
   const [expoPushToken, setExpoPushToken] = useState<any>("");
@@ -70,55 +72,172 @@ const Task = () => {
         return;
       }
 
-      const response = await axios
-        .post("https://reminderapss.rianricardo.me/task", {
-          judul: title,
-          tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
-          waktu_awal: moment(selectedDateTimeFirst).format(),
-          waktu_akhir: moment(selectedDateTimeLast).format(),
-          note: note,
-          aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
-          username: params?.username,
-          kategori: !params?.kategori ? params?.name : params?.kategori,
-        })
-        .then((res) => {
-          if (res?.data?.Respone != 0) {
-            Toast.show({
-              type: "success",
-              text1: `Task have been created`,
+      if (repeatValue === null) {
+        // Handle single task creation
+        await axios
+          .post("https://reminderapss.rianricardo.me/task", {
+            judul: title,
+            tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+            waktu_awal: moment(selectedDateTimeFirst).format(),
+            waktu_akhir: moment(selectedDateTimeLast).format(),
+            note: note,
+            aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
+            username: params?.username,
+            kategori: !params?.kategori ? params?.name : params?.kategori,
+          })
+          .then((res) => {
+            if (res?.data?.Respone != 0) {
+              Toast.show({
+                type: "success",
+                text1: `Task have been created`,
+              });
+
+              const notificationDateFirst = moment(selectedDate)
+                .hour(selectedDateTimeFirst.getHours())
+                .minute(selectedDateTimeFirst.getMinutes())
+                .toDate();
+
+              const notificationDateLast = moment(selectedDate)
+                .hour(selectedDateTimeLast.getHours())
+                .minute(selectedDateTimeLast.getMinutes())
+                .toDate();
+
+              // Schedule push notifications for task reminders
+              schedulePushNotification({
+                titles: `Mulai ${title}`,
+                bodys: note,
+                dates: notificationDateFirst,
+              });
+
+              schedulePushNotification({
+                titles: `Selesai ${title}`,
+                bodys: note,
+                dates: notificationDateLast,
+              });
+
+              nav.navigate("Home");
+            } else {
+              Toast.show({
+                type: "error",
+                text1: "Error",
+              });
+            }
+          });
+
+        // Schedule push notifications and other logic as before
+      } else {
+        for (let i = 0; i < repeatValue; i++) {
+          // Calculate the adjusted start and finish times for each repetition
+          const adjustedStartTime = moment(selectedDateTimeFirst)
+            .add(i, "hours") // Increment by 1 hour for each repetition
+            .format();
+
+          const adjustedFinishTime = moment(selectedDateTimeLast)
+            .add(i, "hours") // Increment by 1 hour for each repetition
+            .format();
+
+          // Use the adjusted times to create tasks for each repetition
+          await axios
+            .post("https://reminderapss.rianricardo.me/task", {
+              judul: title,
+              tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+              waktu_awal: adjustedStartTime,
+              waktu_akhir: adjustedFinishTime,
+              note: note,
+              aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
+              username: params?.username,
+              kategori: !params?.kategori ? params?.name : params?.kategori,
+            })
+            .then((res) => {
+              if (res?.data?.Respone != 0) {
+                Toast.show({
+                  type: "success",
+                  text1: `Task have been created`,
+                });
+
+                const notificationDateFirst = moment(selectedDate)
+                  .hour(selectedDateTimeFirst.getHours())
+                  .minute(selectedDateTimeFirst.getMinutes())
+                  .toDate();
+
+                const notificationDateLast = moment(selectedDate)
+                  .hour(selectedDateTimeLast.getHours())
+                  .minute(selectedDateTimeLast.getMinutes())
+                  .toDate();
+
+                // Schedule push notifications for task reminders
+                schedulePushNotification({
+                  titles: `Mulai ${title}`,
+                  bodys: note,
+                  dates: notificationDateFirst,
+                });
+
+                schedulePushNotification({
+                  titles: `Selesai ${title}`,
+                  bodys: note,
+                  dates: notificationDateLast,
+                });
+
+                nav.navigate("Home");
+              } else {
+                Toast.show({
+                  type: "error",
+                  text1: "Error",
+                });
+              }
             });
+        }
+      }
 
-            const notificationDateFirst = moment(selectedDate)
-              .hour(selectedDateTimeFirst.getHours())
-              .minute(selectedDateTimeFirst.getMinutes())
-              .toDate();
+      // const response = await axios
+      //   .post("https://reminderapss.rianricardo.me/task", {
+      //     judul: title,
+      //     tanggal: moment(selectedDate).format("YYYY-MM-DD h:mm:ss"),
+      //     waktu_awal: moment(selectedDateTimeFirst).format(),
+      //     waktu_akhir: moment(selectedDateTimeLast).format(),
+      //     note: note,
+      //     aktifiti: !params?.aktivitas ? "" : params?.aktivitas,
+      //     username: params?.username,
+      //     kategori: !params?.kategori ? params?.name : params?.kategori,
+      //   })
+      //   .then((res) => {
+      //     if (res?.data?.Respone != 0) {
+      //       Toast.show({
+      //         type: "success",
+      //         text1: `Task have been created`,
+      //       });
 
-            const notificationDateLast = moment(selectedDate)
-              .hour(selectedDateTimeLast.getHours())
-              .minute(selectedDateTimeLast.getMinutes())
-              .toDate();
+      //       const notificationDateFirst = moment(selectedDate)
+      //         .hour(selectedDateTimeFirst.getHours())
+      //         .minute(selectedDateTimeFirst.getMinutes())
+      //         .toDate();
 
-            // Schedule push notifications for task reminders
-            schedulePushNotification({
-              titles: `Mulai ${title}`,
-              bodys: note,
-              dates: notificationDateFirst,
-            });
+      //       const notificationDateLast = moment(selectedDate)
+      //         .hour(selectedDateTimeLast.getHours())
+      //         .minute(selectedDateTimeLast.getMinutes())
+      //         .toDate();
 
-            schedulePushNotification({
-              titles: `Selesai ${title}`,
-              bodys: note,
-              dates: notificationDateLast,
-            });
+      //       // Schedule push notifications for task reminders
+      //       schedulePushNotification({
+      //         titles: `Mulai ${title}`,
+      //         bodys: note,
+      //         dates: notificationDateFirst,
+      //       });
 
-            nav.navigate("Home");
-          } else {
-            Toast.show({
-              type: "error",
-              text1: "Error",
-            });
-          }
-        });
+      //       schedulePushNotification({
+      //         titles: `Selesai ${title}`,
+      //         bodys: note,
+      //         dates: notificationDateLast,
+      //       });
+
+      //       nav.navigate("Home");
+      //     } else {
+      //       Toast.show({
+      //         type: "error",
+      //         text1: "Error",
+      //       });
+      //     }
+      //   });
     } catch (error) {
       Toast.show({
         type: "error",
@@ -155,7 +274,7 @@ const Task = () => {
   return (
     <ScrollDiv flex={1} bg="#fff">
       <Div p={10}>
-        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
+        <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
           Title:
         </Text>
         <Input
@@ -167,7 +286,7 @@ const Task = () => {
       </Div>
 
       <Div p={10}>
-        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
+        <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
           Date:{" "}
         </Text>
         <HeadlessDatePicker
@@ -182,8 +301,8 @@ const Task = () => {
       </Div>
 
       <Div p={10}>
-        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Start Time:{" "}
+        <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
+          Start Time:
         </Text>
         <PickerTimerDesign
           selectedDates={selectedDateTimeFirst}
@@ -192,8 +311,8 @@ const Task = () => {
       </Div>
 
       <Div p={10}>
-        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
-          Finish Time:{" "}
+        <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
+          Finish Time:
         </Text>
         <PickerTimerDesign
           selectedDates={selectedDateTimeLast}
@@ -202,7 +321,49 @@ const Task = () => {
       </Div>
 
       <Div p={10}>
-        <Text fontSize={Responsive(20)} color="#000" fontWeight="500">
+        <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
+          Repeat: 
+        </Text>
+        <Text fontSize={Responsive(16)} color="#000">
+          Add 1 Hours in Start Time and Finish Time        
+        </Text>
+        <Div row justifyContent="space-around" mt={heightPercentageToDP(1)}>
+          <Button
+            w={"auto"}
+            onPress={() => setRepeatValue(1)}
+            bg="#fff"
+            borderColor={"#000"}
+            color="#000"
+            borderWidth={1}
+          >
+            1x
+          </Button>
+          <Button
+            w={"auto"}
+            onPress={() => setRepeatValue(5)}
+            bg="#fff"
+            borderColor={"#000"}
+            color="#000"
+            borderWidth={1}
+          >
+            5x
+          </Button>
+          {/* Add other repeat buttons here */}
+          <Button
+            w={"auto"}
+            onPress={() => setRepeatValue(null)}
+            bg="#fff"
+            borderColor={"#000"}
+            color="#000"
+            borderWidth={1}
+          >
+            No Repeat
+          </Button>
+        </Div>
+      </Div>
+
+      <Div p={10}>
+        <Text fontSize={Responsive(16)} color="#000" fontWeight="500">
           Note:{" "}
         </Text>
         <Input
