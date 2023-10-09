@@ -1,0 +1,538 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Application\Actions\User\ListUsersAction;
+use App\Application\Actions\User\ViewUserAction;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\App;
+use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+
+
+date_default_timezone_set("Asia/Jakarta");
+return function (App $app) {
+    $app->options('/{routes:.*}', function (Request $request, Response $response) {
+        // CORS Pre-Flight OPTIONS Request Handler
+        return $response;
+    });
+
+    $app->get('/', function (Request $request, Response $response) {
+        $response->getBody()->write('Hello world!');
+        return $response;
+    });
+
+    $app->group('/users', function (Group $group) {
+        $group->get('', ListUsersAction::class);
+        $group->get('/{id}', ViewUserAction::class);
+    });
+
+
+    $app->get('/userprofile/{username}', function (Request $request, Response $response,$args) {
+        
+        $us = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM User WHERE username = '$us'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+    $app->get('/listkategori', function (Request $request, Response $response) {
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM mst_kategori");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+     $app->get('/listaktiviti/{kategori}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['kategori'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `aktivitas` WHERE kategori_aktivitas = '$kat'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+    $app->get('/waktutidurday/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT SEC_TO_TIME(SUM(TIMESTAMPDIFF(second,waktu_akhir, waktu_awal)))waktu FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE tanggal = CURDATE() AND kategori = 'TIDUR' AND username = '$kat'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+       $app->get('/statusday/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare(" SELECT (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE tanggal = CURDATE() AND kategori = 'OLAHRAGA' AND username = '$kat')olahraga,
+                            (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE tanggal = CURDATE() AND kategori = 'MAKANAN' AND username = '$kat')makanan,
+                                (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE tanggal = CURDATE() AND kategori = 'BERMAIN' AND username = '$kat')bermain,
+                                    (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE tanggal = CURDATE() AND kategori = 'MINUM' AND username = '$kat')minum,(SELECT SEC_TO_TIME(SUM(TIMESTAMPDIFF(second,waktu_akhir, waktu_awal))) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE tanggal = CURDATE() AND kategori = 'TIDUR' AND username = '$kat')waktu_tidur");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+    
+    
+       $app->get('/statusweek/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE  Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'OLAHRAGA' AND username = '$kat')olahraga,
+                    
+(SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE  Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'MAKANAN' AND username = '$kat')makanan,
+(SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE  Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'BERMAIN' AND username = '$kat')bermain,
+(SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE  Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'MINUM' AND username = '$kat')minum,(SELECT SEC_TO_TIME(SUM(TIMESTAMPDIFF(second,waktu_akhir, waktu_awal))) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE  Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'TIDUR' AND username = '$kat')waktu_tidur");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+    
+    
+       $app->get('/statusmonth/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE   Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'OLAHRAGA' AND username = '$kat')olahraga,
+                (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE   Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'MAKANAN' AND username = '$kat')makanan,
+                (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE   Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'BERMAIN' AND username = '$kat')bermain,
+                (SELECT SUM(`etc`) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE   Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'MINUM' AND username = '$kat')minum,(SELECT SEC_TO_TIME(SUM(TIMESTAMPDIFF(second,waktu_akhir, waktu_awal))) FROM `task` LEFT JOIN aktivitas ON kategori = kategori_aktivitas WHERE Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()) AND kategori = 'TIDUR' AND username = '$kat')waktu_tidur");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+      $app->get('/listtaks/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `task` WHERE  username = '$kat'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+     $app->get('/listtaksday/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `task` WHERE  username = '$kat' AND tanggal = CURDATE()");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+     $app->get('/filterday/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `task` WHERE  username = '$kat' AND tanggal = CURDATE()");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+      $app->get('/filtermonth/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `task` WHERE  username = '$kat' AND  Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE())");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+     $app->get('/filterweek/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `task` WHERE  username = '$kat' AND Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE())");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+    
+     $app->get('/listtaksdone/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT (SELECT COUNT(`status`) FROM `task` WHERE status = '1' AND tanggal = CURDATE())done,(SELECT COUNT(`status`)done FROM `task` WHERE status = '0' AND tanggal = CURDATE())doing  FROM `task` WHERE username = '$kat' LIMIT 1");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
+       $app->get('/listtaksdonemonth/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT (SELECT COUNT(`status`) FROM `task` WHERE status = '1' AND Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()))done,(SELECT COUNT(`status`)done FROM `task` WHERE status = '0' AND Month(tanggal) = Month(CURDATE()) AND Year(tanggal) = Year(CURDATE()))doing  FROM `task` WHERE username = '$kat' LIMIT 1");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+
+
+   $app->get('/listtaksdoneweek/{username}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['username'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT (SELECT COUNT(`status`) FROM `task` WHERE status = '1' AND Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()))done,(SELECT COUNT(`status`)done FROM `task` WHERE status = '0' AND Week(tanggal) = Week(CURDATE()) AND Year(tanggal) = Year(CURDATE()))doing  FROM `task` WHERE username = '$kat' LIMIT 1");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+
+
+
+$app->post('/loginnew', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $un= $input['email'];
+		$pw= $input['password'];
+    
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM User WHERE email = '$un' AND password = '$pw'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+        if($data==null){
+            
+            
+             $status = array('Respone'=> '0' ,'Status' => 'Username atau Password salah');
+             $payload = json_encode($status);
+        }else{
+            $status = array('Respone'=> '1','Status' =>'Berhasi masuk','result'=>$data);
+            $payload = json_encode($status);
+        }
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+
+$app->post('/cekemail', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $un= $input['email'];
+	
+    
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM User WHERE email = '$un'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+        if($data==null){
+            
+            
+             $status = array('Respone'=> '0' ,'Status' => 'Email Tidak Terdaftar');
+             $payload = json_encode($status);
+        }else{
+            $status = array('Respone'=> '1','Status' =>'Email Terdaftar','result'=>$data);
+            $payload = json_encode($status);
+        }
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+$app->post('/newpass', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $un= $input['email'];
+        $pw= $input['password'];
+	
+    
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("UPDATE User SET password = '$pw' WHERE email = '$un'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil Ganti Password','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+
+$app->post('/regis', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $un= $input['email'];
+        $pw= $input['password'];
+	    $us= $input['username'];
+	    $gn= $input['gender'];
+	    
+    
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("INSERT INTO `User`(`username`, `email`, `password`, `gender`, `dob`) VALUES ('$us','$un','$pw','$gn','0000-00-00')");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil register','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+
+
+$app->post('/task', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $jd= $input['judul'];
+       
+        $tg= $input['tanggal'];
+	    $wa= $input['waktu_awal'];
+	    $wak= $input['waktu_akhir'];
+	    
+	    $tanggal = DateTime::createFromFormat('Y-m-d  H:i:s', $tg);
+		$tglaja = date_format($tanggal , 'Y-m-d');
+		$jamaja = date_format($tanggal , 'H:i:s');
+	   
+	    $nt= $input['note'];
+	    $akt= $input['aktifiti'];
+	    $un= $input['username'];
+	    $kat= $input['kategori'];
+	    $id= uniqid(('ID_'));
+	   
+    
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("INSERT INTO `task`(`id_task`,`judul`, `tanggal`, `waktu_awal`, `waktu_akhir`, `note`, `aktiviti`, `username`, `kategori`,`status`) VALUES ('$id','$jd','$tglaja','$wa','$wak','$nt','$akt','$un','$kat','0')");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil Create Task','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+
+
+
+    $app->post('/editprofile', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $un= $input['email'];
+        $pw= $input['password'];
+	    $us= $input['username'];
+	    $gn= $input['gender'];
+	    $dob= $input['dob'];
+	    
+    
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("UPDATE `User` SET `email`='$un',`password`='$pw',`gender`='$gn',`dob`='$dob' WHERE username = '$us'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil register','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+
+
+
+
+  $app->post('/updatetask', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+        $jd= $input['judul'];
+        $tg= $input['tanggal'];
+	    $wa= $input['waktu_awal'];
+	    $wak= $input['waktu_akhir'];
+	    
+	     $tanggal = DateTime::createFromFormat('Y-m-d  H:i:s', $tg);
+		$tglaja = date_format($tanggal , 'Y-m-d');
+		$jamaja = date_format($tanggal , 'H:i:s');
+	   
+	    $nt= $input['note'];
+	    $akt= $input['aktifiti'];
+	    $un= $input['id_task'];
+	    
+	    
+    
+        $db = $this->get(PDO::class);
+        
+        $sth = $db->prepare("UPDATE `task` SET `judul`='$jd',`tanggal`='$tglaja',`waktu_awal`='$wa',`waktu_akhir`='$wak',`note`='$nt',`aktiviti`='$akt'  WHERE `id_task`='$un'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil Update Task','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+  $app->post('/updatetaskdone', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+       
+	    
+	    $un= $input['id_task'];
+	    
+	    
+    
+        $db = $this->get(PDO::class);
+        
+        $sth = $db->prepare("UPDATE `task` SET `status`= '1'  WHERE `id_task`='$un'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil Update Task','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+    
+   
+    
+    
+      $app->post('/deletetask', function ($request, $response, $args) {
+    $input = $request->getParsedBody();
+    
+      
+	    $un= $input['id_task'];
+	   
+	    
+    
+        $db = $this->get(PDO::class);
+        
+        $sth = $db->prepare(" DELETE FROM `task` WHERE id_task = '$un'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        $payload = json_encode($data);
+        
+        
+       
+            $status = array('Respone'=> '1','Status' =>'Berhasil Delete Task','result'=>$sth);
+            $payload = json_encode($status);
+        
+        
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(202);
+});
+
+    $app->get('/listtaksdetail/{id_task}', function (Request $request, Response $response,$args) {
+        
+        $kat = $args['id_task'];
+        
+        $db = $this->get(PDO::class);
+        $sth = $db->prepare("SELECT * FROM `task` WHERE  id_task = '$kat'");
+        $sth->execute();
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $payload = json_encode($data);
+        $response->getBody()->write($payload);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+
+    
+    
+};
